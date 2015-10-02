@@ -47,7 +47,6 @@
     "backbone": "./node_modules/backbone/backbone.js",
     "marionette": "./node_modules/backbone.marionette/lib/backbone.marionette.js",
     "framework7": "./app/bower_components/framework7/dist/js/framework7.js",
-    "oauth": "./app/vendors/jsOAuth-1.3.7.min.js",
     "app": "./app/scripts/app.js"
   },
   "browserify-shim": {
@@ -66,8 +65,7 @@
         "backbone"
       ]
     },
-    "framework7": "Framework7",
-    "oauth": "OAuth"
+    "framework7": "Framework7"
   },
   "browserify": {
     "transform": [
