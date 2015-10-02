@@ -3,11 +3,12 @@ var Backbone = require('backbone');
 var Conf = require('Conf');
 var ClientREST = require('ClientREST');
 var Show = require('../models/show.js');
+var moment = require('moment');
 
 module.exports = Backbone.Collection.extend({
 	model: Show,
 	comparator: function(show) {
-		return -Date.parse(show.get('last_watched_at'));
+		return -moment(show.get('last_watched_at')).unix();
 	},
 
 	/**
@@ -27,19 +28,17 @@ module.exports = Backbone.Collection.extend({
 				_.each(response, _.bind(function(item) {					
 					item.show.last_watched_at = item.last_watched_at;
 
+					// Create model
+					var show = new Show(item.show);
+
 					// Loop shows and get next episode if not finish
-					var slug = item.show.ids.slug;
-
-					ClientREST.get(Conf.traktTV.api_host + '/shows/' + slug + '/progress/watched', {}, _.bind(function(response) {
-						
-						// Add show in list if has next episode
-						if (response.next_episode != null) {
-							item.show.next_episode = response.next_episode;
-
-							shows.push(item.show);
-						}
-
+					show.getLastEpisode(_.bind(function() {
 						addIndex++;
+
+						// Add show if not completely watched by user
+						if (show.get('next_episode')) {
+							shows.push(show.toJSON());
+						}
 
 						// Add all shows at the end
 						if (addIndex == addComplete) {
@@ -49,10 +48,7 @@ module.exports = Backbone.Collection.extend({
 								success(response);
 							}
 						}
-
-					}, this), function() {
-						addIndex++;
-					});
+					}, this));
 
 				}, this));
 			}
