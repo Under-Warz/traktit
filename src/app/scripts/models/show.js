@@ -14,6 +14,9 @@ module.exports = Backbone.Model.extend({
 			if (response.next_episode != null) {
 				this.set('next_episode', response.next_episode);
 			}
+			else {
+				this.set('next_episode', null);
+			}
 
 			if (success) {
 				success(response);

@@ -6,7 +6,7 @@ module.exports = Marionette.CompositeView.extend({
     className: 'swipeout',
 
     initialize: function() {
-    	this.model.on('change', this.render, this);
+    	this.model.on('change', this.updateEpisode, this);
     },
 
     events: {
@@ -16,9 +16,18 @@ module.exports = Marionette.CompositeView.extend({
     didWatchedEpisode: function(e) {
     	this.model.watchedLastEpisode(_.bind(function() {
     		// Update next episode
-    		this.model.getLastEpisode(_.bind(function() {
-    			console.log(this.model);
-    		}, this));
+    		this.model.getLastEpisode();
     	}, this));
+    },
+
+    updateEpisode: function() {
+    	// Hide show from list if no episode left
+		if (this.model.get('next_episode') == null) {
+			window.f7.swipeoutDelete(this.el);
+		}
+		else {
+    		var next_episode = this.model.get('next_episode');
+    		this.$el.find('h3').text('Season ' + next_episode.season + ' - Episode ' + next_episode.number);
+		}
     }
 });
