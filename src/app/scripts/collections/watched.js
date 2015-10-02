@@ -3,11 +3,12 @@ var Backbone = require('backbone');
 var Conf = require('Conf');
 var ClientREST = require('ClientREST');
 var Show = require('../models/show.js');
+var moment = require('moment');
 
 module.exports = Backbone.Collection.extend({
 	model: Show,
 	comparator: function(show) {
-		return -Date.parse(show.get('last_watched_at'));
+		return -moment(show.get('last_watched_at')).unix();
 	},
 
 	/**
