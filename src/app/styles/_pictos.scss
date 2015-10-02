@@ -1,0 +1,11 @@
+i.picto {
+	display: block;
+	background-repeat: no-repeat;
+	background-size: contain;
+
+	&.check {
+		width: 23px;
+		height: 19px;
+		background-image: url('../images/check.svg');
+	}
+}

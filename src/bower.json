@@ -1,0 +1,14 @@
+{
+  "name": "Traktit",
+  "auhtors": [
+    { "name": "Laurent Menu", "email": "menu.laurent@gmail.com" }
+  ],
+  "version": "1.0.0",
+  "dependencies": {
+    "framework7": "~1.2.0",
+    "retina.js": "~1.3.0",
+    "modernizr": "~2.7.1"
+  },
+  "devDependencies": {
+  }
+}

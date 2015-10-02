@@ -1,0 +1,39 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <title>Traktit</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <!-- build:css(.tmp) styles/main.min.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+    <!-- build:js scripts/vendor/modernizr.min.js -->
+    <script src="bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+
+    <script type="text/javascript">
+        // Load cordova.js dynamically
+        var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+
+        if(app) {
+            var fileref = document.createElement('script');
+            fileref.setAttribute("type","text/javascript");
+            fileref.setAttribute("src", 'cordova.js');
+            document.getElementsByTagName("head")[0].appendChild(fileref);
+        }
+    </script>
+</head>
+<body>    
+    <div class="statusbar-overlay"></div>
+
+    <div class="panel-overlay"></div>
+
+    <div class="app-container"></div>
+
+    <!-- build:js scripts/bundle.min.js -->
+    <script src="bundle.js"></script>
+    <!-- endbuild -->
+</body>
+</html>
