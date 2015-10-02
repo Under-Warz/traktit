@@ -1,4 +1,3 @@
-// This is ENV based conf
 var conf = {
     dev: {
         traktTV: {

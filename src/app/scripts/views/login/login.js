@@ -1,7 +1,6 @@
 var $ = require('jquery');
 var _ = require('underscore');
 var MainItemView = require('../mainItemView');
-var OAuth = require('oauth');
 var User = require('../../models/user');
 var App = require('App');
 var Conf = require('Conf');
