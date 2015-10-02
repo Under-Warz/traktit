@@ -35,6 +35,7 @@
     "hbsfy": "^2.3.1",
     "jquery": "^2.1.4",
     "load-grunt-tasks": "^0.6.0",
+    "moment": "^2.10.6",
     "time-grunt": "^1.0.0",
     "underscore": "^1.8.3"
   },

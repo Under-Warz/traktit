@@ -35,15 +35,16 @@ module.exports = MainItemView.extend({
             };
 
             // Open Twitter authorize
-            this.connect = window.open(Conf.traktTV.api_host + '/oauth/authorize?' + $.param(params), '_blank', 'location=no,hardwareback=yes,allowInlineMediaPlayback=yes,mediaPlaybackRequiresUserAction=no');
+            this.connect = window.open(Conf.traktTV.api_host + '/oauth/authorize?' + $.param(params), '_blank', 'location=no,hardwareback=yes,ignoresslerror=yes');
             this.connect.addEventListener('loadstart', _.bind(this.connectCallback, this));
+            this.connect.addEventListener('loaderror', _.bind(this.connectError, this));
         }
         else {
             var fakeResponse = {
-                access_token: "",
-                created_at: "",
-                expires_in: "",
-                refresh_token: "",
+                access_token: "419389748576700183616b55984b5cf9c22445803b970f1633fd8d385d3bbc2f",
+                created_at: 1443791697,
+                expires_in: 7776000,
+                refresh_token: "5801ceb70fa90bd7bc4e6b41c0679f9fedd951aef52dfe7861d0794eb50fafa9",
                 scope: "public",
                 token_type: "bearer"
             };
@@ -97,7 +98,16 @@ module.exports = MainItemView.extend({
         // Create user
         App.currentUser = new User(response);
 
+        // Save user info in localStorage
+        localStorage.setItem("currentUser", JSON.stringify(response));
+
         // Navigate to home
         window.router.navigate('', { trigger: true });
+    },
+
+    connectError: function() {
+        this.connect.close();
+
+        alert('Oops! Cannot connect to TraktTV');
     }
 });
