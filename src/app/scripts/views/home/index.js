@@ -1,8 +1,8 @@
-var Marionnette = require('marionette');
-var WatchedCollection = require('../../collections/watched.js');
-var ShowView = require('./show.js');
+var MainCompositeView = require('../mainCompositeView');
+var WatchedCollection = require('../../collections/watched');
+var ShowView = require('./show');
 
-module.exports = Marionette.CompositeView.extend({
+module.exports = MainCompositeView.extend({
     template: require('../../templates/home/index.hbs'),
     childView: ShowView,
     childViewContainer: ".list-block ul",

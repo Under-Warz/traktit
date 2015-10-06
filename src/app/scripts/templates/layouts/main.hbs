@@ -1,10 +1,42 @@
+<div class="panel panel-left panel-reveal">
+    <div class="content-block">
+    	<ul>
+    		<li><a href="movies" data-view=".view-movies">Movies</a></li>
+    	</ul>
+    </div>
+</div>
+
+<div class="panel panel-right panel-reveal">
+    <div class="content-block">
+    	<ul>
+    		<li><a href="#" data-filter="trending">Trending</a></li>
+    		<li><a href="#" data-filter="popular">Popular</a></li>
+    		<li><a href="#" data-filter="played">Played</a></li>
+    		<li><a href="#" data-filter="watched">Watched</a></li>
+    		<li><a href="#" data-filter="collected">Collected</a></li>
+    	</ul>
+    </div>
+</div>
+
 <div class="views tabs">
 	<div class="view tab view-main active">
 		<div class="navbar">
 			<div class="navbar-inner">
-				<div class="left"></div>
+				<div class="left"><a href="#" data-panel="left" class="menu open-panel">Menu</a></div>
 				<div class="center sliding">Hello</div>
 				<div class="right"></div>
+			</div>
+		</div>
+
+		<div class="pages navbar-through"></div>
+	</div>
+
+	<div class="view tab view-movies">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="left"><a href="#" data-panel="left" class="menu open-panel">Menu</a></div>
+				<div class="center sliding">Movies</div>
+				<div class="right"><a href="#" data-panel="right" class="filters open-panel">Lists</a></div>
 			</div>
 		</div>
 

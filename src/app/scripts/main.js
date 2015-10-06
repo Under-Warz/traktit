@@ -43,6 +43,12 @@ App.on('start', function() {
         domCache: true // Use to get deep back button work
     });
 
+    // Movies view
+    f7.addView('.view-movies', {
+        domCache: true, // Use to get deep back button work
+        dynamicNavbar: true
+    });
+
     // Attache current Marionette view to Framework7 page for delete
     f7.onPageInit('*', function(page) {
         var viewSelector = page.view.selector;
@@ -55,6 +61,10 @@ App.on('start', function() {
 
             case '.view-login':
                 page.context = window.router.layout.loginView.currentView;
+                break;
+
+            case '.view-movies':
+                page.context = window.router.layout.moviesView.currentView;
                 break;
         }
     });

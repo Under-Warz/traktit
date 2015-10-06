@@ -1,4 +1,5 @@
-require('marionette');
+var Marionette = require('marionette');
+var App = require('App');
 
 var F7Region = Marionette.Region.extend({
 	oldViews: null,
@@ -37,6 +38,8 @@ module.exports = Marionette.LayoutView.extend({
 	},
 
 	events: {
+		"click .panel-left a": "navigateFromMenu",
+		"click .panel-right a": "didSelectFilter"
 	},
 
   	regions: {
@@ -47,7 +50,21 @@ module.exports = Marionette.LayoutView.extend({
         loginView: {
             regionClass: F7Region,
             selector: ".view-login .pages"
+        },
+        moviesView: {
+            regionClass: F7Region,
+            selector: ".view-movies .pages"
         }
+  	},
+
+  	navigateFromMenu: function(e) {
+  		// Close menu
+  		window.f7.closePanel();
+
+  		this.navigate(e);
+
+  		e.preventDefault();
+        return false;
   	},
 
   	navigate: function(e) {
@@ -65,5 +82,15 @@ module.exports = Marionette.LayoutView.extend({
 
         e.preventDefault();
         return false;
+    },
+
+    didSelectFilter: function(e) {
+    	// Close menu
+    	window.f7.closePanel();
+    	
+    	App.triggerMethod('selectFilter', e);
+
+    	e.preventDefault();
+    	return false;
     }
 });

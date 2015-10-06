@@ -46,6 +46,9 @@ body {
 
 	.item-title {
 		color: #fff;
+		white-space: normal;
+		overflow: visible;
+		text-overflow: visible;
 
 		h2 {
 			margin: 0;

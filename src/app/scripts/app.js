@@ -3,6 +3,7 @@ var User = require('./models/user.js');
 
 var App = Marionette.Application.extend({
 	currentUser: null,
+	movies: null,
 	
 	initialize: function(options) {
 		// Check if user token is in localStorage
@@ -10,6 +11,9 @@ var App = Marionette.Application.extend({
 		if (userData) {
 			this.currentUser = new User(JSON.parse(userData));
 		}
+
+		// Init movies
+		this.movies = {};
   	}
 });
 

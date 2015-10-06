@@ -3,7 +3,7 @@ var conf = {
         traktTV: {
             client_id: "",
             client_secret: "",
-            redirect_uri: "",
+            redirect_uri: "http://localhost:9000",
             api_host: "http://api.staging.trakt.tv",
             api_version: 2
         },
@@ -23,6 +23,9 @@ var conf = {
 var common = {
     gcm: {
         senderID: ""
+    },
+    pagination: {
+        limit: 10
     }
 };
 
