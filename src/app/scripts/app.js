@@ -13,7 +13,33 @@ var App = Marionette.Application.extend({
 		}
 
 		// Init movies
-		this.movies = {};
+		var movies = this.getPersistentData('movies');
+		if (movies) {
+			this.movies = JSON.parse(movies);
+		}
+		else {
+			this.movies = {};
+		}
+  	},
+
+  	savePersistentData: function(key, value) {
+  		if (window.cordova) {
+
+  		}
+  		else {
+			// Save in localStorage
+			localStorage.setItem(key, JSON.stringify(value));	
+  		}
+  	},
+
+  	getPersistentData: function(key) {
+  		if (window.cordova) {
+
+  		}
+  		else {
+  			var data = localStorage.getItem(key);
+  			return data;
+  		}
   	}
 });
 

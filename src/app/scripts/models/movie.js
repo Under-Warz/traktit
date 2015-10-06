@@ -10,9 +10,13 @@ module.exports = Backbone.Model.extend({
 		fetched: false
 	},
 
-	// Save movie detail in local storage
-	save: function() {
+	// Save movie detail in app and optionnaly in persistant storage
+	save: function(persistant) {
 		App.movies[this.get('ids').slug] = this.toJSON();
+
+		if (persistant) {
+			App.savePersistentData('movies', App.movies);
+		}
 	},
 
 	fetch: function(success, error) {
@@ -62,7 +66,7 @@ module.exports = Backbone.Model.extend({
 		], _.bind(function(err, results) {
 			if (err == null) {
 				this.set('fetched', true);
-				this.save();
+				this.save(true);
 
 				if (success) {
 					success();
