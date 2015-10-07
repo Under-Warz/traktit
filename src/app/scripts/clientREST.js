@@ -1,11 +1,18 @@
 var Conf = require('Conf');
-var App = require('App');
 
 module.exports = {
 	constructHeader: function(xhr) {
+		var access_token;
+		var currentUser = localStorage.getItem('currentUser');
+		
+		if (currentUser) {
+			currentUser = JSON.parse(currentUser);
+			access_token = currentUser.access_token;
+		}
+
 		xhr.setRequestHeader("trakt-api-key", Conf.traktTV.client_id);
 		xhr.setRequestHeader("trakt-api-version", Conf.traktTV.api_version);
-		xhr.setRequestHeader("Authorization", "Bearer " + App.currentUser.get('access_token'));
+		xhr.setRequestHeader("Authorization", "Bearer " + access_token);
 	},
 
 	get: function(url, params, success, error) {

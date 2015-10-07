@@ -13,10 +13,14 @@ module.exports = ChildItemView.extend({
         }
 
         // Reload
-        this.model.on('change', this.update, this);
+        this.model.on('change', this.bindData, this);
     },
 
-    update: function() {
+    additionalEvents: {
+        "click .btn-check": "toggleCheck"
+    },
+
+    bindData: function() {
         _.each(this.$el.find('#movies-single *[data-attr]'), _.bind(function(elm) {
             $(elm).empty().html(this.model.get($(elm).data('attr')));
         }, this));
@@ -26,16 +30,17 @@ module.exports = ChildItemView.extend({
 
         // Render related
         this.renderRelated();
+
+        // Seenit ?
+        if (this.model.get('seenit') == true) {
+            this.$el.find('#movies-single .btn-check').addClass('uncheck');
+        }
     },
 
     onShow: function() {
         ChildItemView.prototype.onShow.call(this, this, null, true);
 
-        // Render actors
-        this.renderCast();
-
-        // Render related
-        this.renderRelated();
+        this.bindData();
     },
 
     renderCast: function() {
@@ -68,5 +73,26 @@ module.exports = ChildItemView.extend({
         }
         catch(e) {        
         }
+    },
+
+    /**
+     * Check / uncheck movie
+     */
+    toggleCheck: function(e) {
+        // Uncheck
+        if ($(e.currentTarget).hasClass('uncheck')) {
+            this.model.removeFromHistory(function() {
+                $(e.currentTarget).removeClass('uncheck');
+            });
+        }
+        // Check
+        else {
+            this.model.addToHistory(function() {
+                $(e.currentTarget).addClass('uncheck');
+            });
+        }
+
+        e.preventDefault();
+        return false;
     }
 });

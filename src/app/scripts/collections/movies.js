@@ -3,6 +3,7 @@ var Backbone = require('backbone');
 var Conf = require('Conf');
 var ClientREST = require('ClientREST');
 var Movie = require('../models/movie');
+var App = require('App');
 
 module.exports = Backbone.Collection.extend({
 	model: Movie,

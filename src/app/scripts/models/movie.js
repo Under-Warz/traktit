@@ -7,7 +7,13 @@ var async = require('async');
 
 module.exports = Backbone.Model.extend({
 	defaults: {
-		fetched: false
+		fetched: false,
+		seenit: false
+	},
+
+	initialize: function() {
+		// Set if movie has been see by user
+		this.setMovieSeenIt();
 	},
 
 	// Save movie detail in app and optionnaly in persistant storage
@@ -227,5 +233,77 @@ module.exports = Backbone.Model.extend({
 				error();
 			}
 		});
+	},
+
+	/**
+	 * Parse User's movies history and set movie seen if present in history
+	 */
+	setMovieSeenIt: function() {
+		// Already view this ?
+        var watchedMovies = App.currentUser.get('movies');
+        if (watchedMovies) {
+        	var found = _.find(watchedMovies, _.bind(function(item) {
+        		return item.movie.ids.slug == this.get('ids').slug
+        	}, this));
+        	
+        	if (found) {
+        		this.set('seenit', true);
+        	}
+        }
+	},
+
+	/**
+	 * Remove the movie from user's history
+	 */
+	removeFromHistory: function(success, error) {
+		var movie = {
+			ids: this.get('ids')
+		};
+
+		ClientREST.post(Conf.traktTV.api_host + '/sync/history/remove', { movies: [movie] }, _.bind(function(response) {
+			if (response.deleted.movies > 0) {
+				// Update status
+				this.set('seenit', false);
+
+				// Remove from history
+				var watchedMovies = App.currentUser.get('movies');
+				if (watchedMovies) {
+					var index = -1;
+					var found = _.find(watchedMovies, _.bind(function(item) {
+		    			return item.movie.ids.slug == this.get('ids').slug
+		    		}, this));
+
+		    		if (found) {
+		    			index = _.indexOf(watchedMovies, found);
+
+		    			// Remove from watched list
+		    			watchedMovies.splice(index, 1);
+		    		}
+				}
+
+				// Save persistant data
+				this.save(true);
+
+				if (success) {
+					success(response);
+				}
+			}
+			else {
+				if (error) {
+					error();
+				}
+			}
+		}, this), function(response) {
+			if (error) {
+				error();
+			}
+		});
+	},
+
+	/** 
+	  * Add movie to user's history
+	  */
+	addToHistory: function(success, error) {
+
 	}
 });
