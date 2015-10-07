@@ -8,4 +8,34 @@ i.picto {
 		height: 19px;
 		background-image: url('../images/check.svg');
 	}
+
+	&.add {
+		width: 20px;
+		height: 20px;
+		background-image: url('../images/add.svg');	
+	}
+
+	&.add-list {
+		width: 24px;
+		height: 22px;
+		background-image: url('../images/add_list.svg');	
+	}
+
+	&.comment {
+		width: 24px;
+		height: 22px;
+		background-image: url('../images/comment.svg');	
+	}
+
+	&.star {
+		width: 25px;
+		height: 23px;
+		background-image: url('../images/star.svg');
+	}
+
+	&.share {
+		width: 26px;
+		height: 18px;
+		background-image: url('../images/share.svg');	
+	}
 }
