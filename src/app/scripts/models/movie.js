@@ -4,6 +4,7 @@ var Conf = require('Conf');
 var ClientREST = require('ClientREST');
 var App = require('App');
 var async = require('async');
+var moment = require('moment');
 
 module.exports = Backbone.Model.extend({
 	defaults: {
@@ -304,6 +305,46 @@ module.exports = Backbone.Model.extend({
 	  * Add movie to user's history
 	  */
 	addToHistory: function(success, error) {
+		var movie = {
+			ids: this.get('ids')
+		};
 
+		ClientREST.post(Conf.traktTV.api_host + '/sync/history', { movies: [movie] }, _.bind(function(response) {
+			if (response.added.movies > 0) {
+				// Update status
+				this.set('seenit', true);
+
+				// Add to local history
+				var watchedMovies = App.currentUser.get('movies');
+				if (watchedMovies) {
+					watchedMovies.push({
+						plays: 1,
+						last_watched_at: moment().utc().toISOString(),
+						movie: {
+							title: this.get('title'),
+							year: this.get('year'),
+							ids: this.get('ids'),
+							images: this.get('images')
+						}
+					});
+				}
+
+				// Save persistant data
+				this.save(true);
+
+				if (success) {
+					success(response);
+				}
+			}
+			else {
+				if (error) {
+					error();
+				}
+			}
+		}, this), function(response) {
+			if (error) {
+				error();
+			}
+		});
 	}
 });
