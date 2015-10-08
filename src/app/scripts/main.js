@@ -1,7 +1,7 @@
-require('jquery');
-require('backbone');
-require('framework7');
-var Handlebars = require('handlebars');
+var $ = require('jquery');
+var Backbone = require('backbone');
+var Framework7 = require('framework7');
+var HandlebarsHelpers = require('./hbs_helpers');
 
 var App = require('App');
 var Conf = require('Conf');
@@ -72,7 +72,7 @@ App.on('start', function() {
     /**
      * Destroy Marionette view after back
      */
-    f7.onPageBack('*', function(page) {
+    f7.onPageAfterBack('*', function(page) {
         page.context.destroy(); // On back, destroy the BM's view attach to the F7's Page
     });
 
@@ -143,14 +143,3 @@ function onResume() {
 function onPause() {
     
 }
-
-
-/**
- * Register all your Handlebars helpers / partials
- */
-
-// Each with limit
-Handlebars.registerHelper('limit', function (arr, limit) {
-    if (!_.isArray(arr)) { return []; } // remove this line if you don't want the lodash/underscore dependency
-    return arr.slice(0, limit);
-});

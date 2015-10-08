@@ -6,27 +6,9 @@ var F7Region = Marionette.Region.extend({
 	initialize: function() {
 		this.oldViews = [];
 	},
-    addView: function(view, options) {
-    	// If already view attached, append new one for transition
-    	if (this.currentView) {
-    		// Save old views for delete later only to reset view on region empty
-    		/*if ($(this.el).parent().hasClass('view-login')) {
-    			this.oldViews.push(this.currentView);
-    		}*/
-
-        	view.render();
-
-        	this.currentView = view;
-
-        	this.triggerMethod('show', view, this);
-      		Marionette.triggerMethodOn(view, 'show', view, this, true, true);
-
-      		return this;
-      	}
-      	else {
-      		this.show(view);
-      	}
-    }
+    attachHtml: function(view) {
+    	this.$el.append(view.el);
+  	}
 });
 
 module.exports = Marionette.LayoutView.extend({
@@ -43,7 +25,7 @@ module.exports = Marionette.LayoutView.extend({
 	},
 
   	regions: {
-	   mainView: {
+	   	mainView: {
     		regionClass: F7Region,
     		selector: ".view-main .pages"
     	},

@@ -142,7 +142,7 @@ module.exports = function (grunt) {
 	      	},
 	      	serve: {
 	      		files: {
-	      			'<%= yeoman.app %>/bundle.js': ['<%= yeoman.app %>/scripts/**/*.js']
+	      			'<%= yeoman.app %>/bundle.js': ['<%= yeoman.app %>/scripts/**/*.js', '<%= yeoman.app %>/scripts/**/*.hbs']
 	      		}
 	      	}
       	},

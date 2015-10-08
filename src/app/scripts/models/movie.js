@@ -90,21 +90,23 @@ module.exports = Backbone.Model.extend({
 	// Get movies details
 	fetchTranslations: function(success, error) {
 		ClientREST.get(Conf.traktTV.api_host + '/movies/' + this.get('ids').slug + '/translations', {}, _.bind(function(response) {
-			// Get user's language or english by default
-			var content;
-			var index = _.findIndex(response, { language: App.currentUser.get('language') });
-			if (index > -1 && response[index].overview != null) {
-				content = response[index];
-			}
-			else {
-				index = _.findIndex(response, { language: 'en' });
-				content = response[index];
-			}
+			if (response.length > 0) {
+				// Get user's language or english by default
+				var content;
+				var index = _.findIndex(response, { language: App.currentUser.get('language') });
+				if (index > -1 && response[index].overview != null) {
+					content = response[index];
+				}
+				else {
+					index = _.findIndex(response, { language: 'en' });
+					content = response[index];
+				}
 
-			// Update model
-			this.set('overview', content.overview);
-			this.set('tagline', content.tagline);
-			this.set('title', content.title);
+				// Update model
+				this.set('overview', content.overview);
+				this.set('tagline', content.tagline);
+				this.set('title', content.title);
+			}
 
 			// Save
 			this.save();
@@ -122,22 +124,24 @@ module.exports = Backbone.Model.extend({
 	// Get releases details
 	fetchReleasesDates: function(success, error) {
 		ClientREST.get(Conf.traktTV.api_host + '/movies/' + this.get('ids').slug + '/releases', {}, _.bind(function(response) {
-			var release;
-			var index = _.findIndex(response, { country: App.currentUser.get('country') });
-			if (index > -1) {
-				release = response[index];
-			}
-			else {
-				index = _.findIndex(response, { country: 'us' });
-				release = response[index];
-			}
+			if (response.length > 0) {
+				var release;
+				var index = _.findIndex(response, { country: App.currentUser.get('country') });
+				if (index > -1) {
+					release = response[index];
+				}
+				else {
+					index = _.findIndex(response, { country: 'us' });
+					release = response[index];
+				}
 
-			// Update model
-			this.set('release_date', release.release_date);
-			this.set('certification', release.certification);
+				// Update model
+				this.set('release_date', release.release_date);
+				this.set('certification', release.certification);
 
-			// Save
-			this.save();
+				// Save
+				this.save();
+			}
 
 			if (success) {
 				success(response);
@@ -152,9 +156,11 @@ module.exports = Backbone.Model.extend({
 	// Get casting
 	fetchCasting: function(success, error) {
 		ClientREST.get(Conf.traktTV.api_host + '/movies/' + this.get('ids').slug + '/people', { extended: 'images' }, _.bind(function(response) {
-			// Update model
-			this.set('cast', response.cast);
-			this.set('crew', response.crew);
+			if (response) {
+				// Update model
+				this.set('cast', response.cast);
+				this.set('crew', response.crew);
+			}
 
 			// Save
 			this.save();
@@ -172,8 +178,10 @@ module.exports = Backbone.Model.extend({
 	// Get ratings
 	fetchRatings: function(success, error) {
 		ClientREST.get(Conf.traktTV.api_host + '/movies/' + this.get('ids').slug + '/ratings', {}, _.bind(function(response) {
-			// Update model
-			this.set('ratings', response);
+			if (response) {
+				// Update model
+				this.set('ratings', response);
+			}
 
 			// Save
 			this.save();
@@ -196,8 +204,10 @@ module.exports = Backbone.Model.extend({
 		};
 
 		ClientREST.get(Conf.traktTV.api_host + '/movies/' + this.get('ids').slug + '/related', _.extend(parameters, params), _.bind(function(response) {
-			// Update model
-			this.set('related', response);
+			if (response) {
+				// Update model
+				this.set('related', response);
+			}
 
 			// Save
 			this.save();
@@ -220,8 +230,10 @@ module.exports = Backbone.Model.extend({
 		};
 
 		ClientREST.get(Conf.traktTV.api_host + '/movies/' + this.get('ids').slug + '/comments', _.extend(parameters, params), _.bind(function(response) {
-			// Update model
-			this.set('comments', response); // TODO: save comments collection
+			if (response) {
+				// Update model
+				this.set('comments', response); // TODO: save comments collection
+			}
 
 			// Save
 			this.save();

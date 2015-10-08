@@ -6,49 +6,62 @@ module.exports = ChildItemView.extend({
     castSwiper: null,
     relatedSwiper: null,
 
+    attributes: function() {
+        return {
+            id: "movies-single",
+            class: "page single",
+            "data-page": "movies-single"
+        }
+    },
+
     initialize: function() {
         // Load movie
         if (this.model.get('fetched') == false) {
-            this.model.fetch();
+            this.model.fetch(_.bind(function() {
+                this.render();
+            }, this));
         }
-
-        // Reload
-        this.model.on('change', this.bindData, this);
     },
 
     additionalEvents: {
-        "click .btn-check": "toggleCheck"
+        "click .btn-check": "toggleCheck",
+        "click .related .swiper-slide": "showRelatedMovie"
     },
 
-    bindData: function() {
-        _.each(this.$el.find('#movies-single *[data-attr]'), _.bind(function(elm) {
-            $(elm).empty().html(this.model.get($(elm).data('attr')));
-        }, this));
+    onRender: function() {
+        setTimeout(_.bind(function() {
+            // Seenit ?
+            if (this.model.get('seenit') == true) {
+                this.$el.find('#movies-single .btn-check').addClass('uncheck');
+            }
 
-        // Render actors
-        this.renderCast();
+            // Render casting
+            if (this.model.get('cast')) {
+                this.castSwiper = window.f7.swiper(this.$el.find('.cast'), {
+                    slidesPerView: 'auto',
+                    preventClicks: true
+                });
+            }
 
-        // Render related
-        this.renderRelated();
-
-        // Seenit ?
-        if (this.model.get('seenit') == true) {
-            this.$el.find('#movies-single .btn-check').addClass('uncheck');
-        }
+            // Render related
+            if (this.model.get('related')) {
+                this.relatedSwiper = window.f7.swiper(this.$el.find('.related'), {
+                    slidesPerView: 'auto',
+                    preventClicks: true
+                });
+            }
+        }, this), 0);
     },
 
-    onShow: function() {
-        ChildItemView.prototype.onShow.call(this, this, null, true);
-
-        this.bindData();
-    },
-
-    renderCast: function() {
+    /*renderCast: function() {
         try {
             if (this.model.get('cast').length > 0 && this.castSwiper == null) {
-                this.castSwiper = window.f7.swiper(this.$el.find('#movies-single .cast'), {
-                    slidesPerView: 'auto'
+                this.castSwiper = window.f7.swiper(this.$el.find('.cast'), {
+                    slidesPerView: 'auto',
+                    preventClicks: true
                 });
+
+                console.log(this.$el.find('.cast'));
 
                 _.each(this.model.get('cast'), _.bind(function(item) {
                     this.castSwiper.appendSlide(require('../../templates/partials/actor.hbs')(item));
@@ -62,8 +75,9 @@ module.exports = ChildItemView.extend({
     renderRelated: function() {
         try {
             if (this.model.get('related').length > 0 && this.relatedSwiper == null) {
-                this.relatedSwiper = window.f7.swiper(this.$el.find('#movies-single .related'), {
-                    slidesPerView: 'auto'
+                this.relatedSwiper = window.f7.swiper(this.$el.find('.related'), {
+                    slidesPerView: 'auto',
+                    preventClicks: true
                 });
 
                 _.each(this.model.get('related'), _.bind(function(item) {
@@ -73,7 +87,7 @@ module.exports = ChildItemView.extend({
         }
         catch(e) {        
         }
-    },
+    },*/
 
     /**
      * Check / uncheck movie
@@ -91,6 +105,23 @@ module.exports = ChildItemView.extend({
                 $(e.currentTarget).addClass('uncheck');
             });
         }
+
+        e.preventDefault();
+        return false;
+    },
+
+    /**
+     * Show related movie
+     */
+    showRelatedMovie: function(e) {
+        var index = this.$el.find('.related .swiper-slide').index(e.currentTarget);
+        var relatedMovie = this.model.get('related')[index];
+
+        if (App.movies[relatedMovie.ids.slug] == null) {
+            App.movies[relatedMovie.ids.slug] = relatedMovie;
+        }
+
+        window.router.navigate('movies/' + relatedMovie.ids.slug, { trigger: true });
 
         e.preventDefault();
         return false;

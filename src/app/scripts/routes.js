@@ -71,7 +71,9 @@ module.exports = Marionette.AppRouter.extend({
         var page = new MovieSingle({
             model: new Movie(App.movies[slug])
         });
-        this.layout.moviesView.addView(page);
+        this.layout.moviesView.show(page, {
+            preventDestroy: true
+        });
     },
 
     /** Helpers **/
