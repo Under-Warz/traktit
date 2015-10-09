@@ -9,12 +9,20 @@ var moment = require('moment');
 module.exports = Backbone.Model.extend({
 	defaults: {
 		fetched: false,
-		seenit: false
+		seenit: false,
+		inWatchlist: false,
+		inCollection: false
 	},
 
 	initialize: function() {
 		// Set if movie has been see by user
-		this.setMovieSeenIt();
+		this.setMovieIsSeenIt();
+
+		// Set if movie is in user's watchlist
+		this.setMovieIsInWatchlist();
+
+		// Set if movie is in user's movies list
+		this.setMovieIsInCollection();
 	},
 
 	// Save movie detail in app and optionnaly in persistant storage
@@ -251,9 +259,8 @@ module.exports = Backbone.Model.extend({
 	/**
 	 * Parse User's movies history and set movie seen if present in history
 	 */
-	setMovieSeenIt: function() {
-		// Already view this ?
-        var watchedMovies = App.currentUser.get('movies');
+	setMovieIsSeenIt: function() {
+        var watchedMovies = App.currentUser.get('watchedMovies');
         if (watchedMovies) {
         	var found = _.find(watchedMovies, _.bind(function(item) {
         		return item.movie.ids.slug == this.get('ids').slug
@@ -265,32 +272,84 @@ module.exports = Backbone.Model.extend({
         }
 	},
 
-	/**
-	 * Remove the movie from user's history
+	/** 
+	 * Parse User's movie watchlist and set movie in list if present
 	 */
-	removeFromHistory: function(success, error) {
+	setMovieIsInWatchlist: function() {
+        var watchlist = App.currentUser.get('watchlist');
+        if (watchlist) {
+        	var found = _.find(watchlist, _.bind(function(item) {
+        		if (item.movie) {
+        			return item.movie.ids.slug == this.get('ids').slug
+        		}
+        	}, this));
+        	
+        	if (found) {
+        		this.set('inWatchlist', true);
+        	}
+        }
+	},
+
+	/** 
+	 * Parse User's movie watchlist and set movie in list if present
+	 */
+	setMovieIsInCollection: function() {
+        var moviesCollection = App.currentUser.get('collectionMovies');
+        if (moviesCollection) {
+        	var found = _.find(moviesCollection, _.bind(function(item) {
+    			return item.movie.ids.slug == this.get('ids').slug
+        	}, this));
+        	
+        	if (found) {
+        		this.set('inCollection', true);
+        	}
+        }
+	},
+
+	/**
+	 * Remove the movie from user's history or collection or watchlist
+	 */
+	removeFrom: function(action, success, error) {
 		var movie = {
 			ids: this.get('ids')
 		};
 
-		ClientREST.post(Conf.traktTV.api_host + '/sync/history/remove', { movies: [movie] }, _.bind(function(response) {
+		ClientREST.post(Conf.traktTV.api_host + '/sync/' + action + '/remove', { movies: [movie] }, _.bind(function(response) {
 			if (response.deleted.movies > 0) {
-				// Update status
-				this.set('seenit', false);
 
-				// Remove from history
-				var watchedMovies = App.currentUser.get('movies');
-				if (watchedMovies) {
+				var list;
+
+				if (action == 'history') {
+					// Update status
+					this.set('seenit', false);
+					list = App.currentUser.get('watchedMovies');
+				}
+				else if (action == 'collection') {
+					this.set('inCollection', false);
+					list = App.currentUser.get('collectionMovies');
+				}
+				else if (action == 'watchlist') {
+					this.set('inWatchlist', false);
+					list = App.currentUser.get('watchlist');
+				}
+
+				// Remove from local list
+				if (list) {
 					var index = -1;
-					var found = _.find(watchedMovies, _.bind(function(item) {
-		    			return item.movie.ids.slug == this.get('ids').slug
+					var found = _.find(list, _.bind(function(item) {
+						if (item.movie) {
+		    				return item.movie.ids.slug == this.get('ids').slug
+		    			}
+		    			else {
+		    				return false;
+		    			}
 		    		}, this));
 
 		    		if (found) {
-		    			index = _.indexOf(watchedMovies, found);
+		    			index = _.indexOf(list, found);
 
-		    			// Remove from watched list
-		    			watchedMovies.splice(index, 1);
+		    			// Remove it if found
+		    			list.splice(index, 1);
 		    		}
 				}
 
@@ -314,22 +373,33 @@ module.exports = Backbone.Model.extend({
 	},
 
 	/** 
-	  * Add movie to user's history
+	  * Add movie to user's history or collection or watchlist
 	  */
-	addToHistory: function(success, error) {
+	addTo: function(action, success, error) {
 		var movie = {
 			ids: this.get('ids')
 		};
 
-		ClientREST.post(Conf.traktTV.api_host + '/sync/history', { movies: [movie] }, _.bind(function(response) {
+		ClientREST.post(Conf.traktTV.api_host + '/sync/' + action, { movies: [movie] }, _.bind(function(response) {
 			if (response.added.movies > 0) {
-				// Update status
-				this.set('seenit', true);
+
+				if (action == 'history') {
+					// Update status
+					this.set('seenit', true);
+					list = App.currentUser.get('watchedMovies');
+				}
+				else if (action == 'collection') {
+					this.set('inCollection', true);
+					list = App.currentUser.get('collectionMovies');
+				}
+				else if (action == 'watchlist') {
+					this.set('inWatchlist', true);
+					list = App.currentUser.get('watchlist');
+				}
 
 				// Add to local history
-				var watchedMovies = App.currentUser.get('movies');
-				if (watchedMovies) {
-					watchedMovies.push({
+				if (list) {
+					list.push({
 						plays: 1,
 						last_watched_at: moment().utc().toISOString(),
 						movie: {

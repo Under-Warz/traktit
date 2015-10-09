@@ -19,6 +19,20 @@ module.exports = Backbone.Model.extend({
 				}, function() {
 					callback("error", 'getWatchedMovies');
 				});
+			}, this),
+			_.bind(function(callback) {
+				this.getWatchlistContent(function(response) {
+					callback(null, 'getWatchlistContent');
+				}, function() {
+					callback("error", 'getWatchlistContent');
+				});
+			}, this),
+			_.bind(function(callback) {
+				this.getCollectionMovies(function(response) {
+					callback(null, 'getCollectionMovies');
+				}, function() {
+					callback("error", 'getCollectionMovies');
+				});
 			}, this)
 		]);
 	},
@@ -27,13 +41,45 @@ module.exports = Backbone.Model.extend({
 	 * Get all movies watched
 	 */
 	getWatchedMovies: function(success, error) {
-		var shows = [];
-		var addIndex = 0;
-		var addComplete = 0;
-
 		ClientREST.get(Conf.traktTV.api_host + '/sync/watched/movies', { extended: 'images' }, _.bind(function(response) {
 			// Save data in user
-			this.set('movies', response);
+			this.set('watchedMovies', response);
+
+			if (success) {
+				success(response);
+			}
+		}, this), function() {
+			if (error) {
+				error();
+			}
+		});
+	},
+
+	/**
+	 * Get all movies / shows in watchlist
+	 */
+	getWatchlistContent: function(success, error) {
+		ClientREST.get(Conf.traktTV.api_host + '/sync/watchlist', { extended: 'images' }, _.bind(function(response) {
+			// Save data in user
+			this.set('watchlist', response);
+
+			if (success) {
+				success(response);
+			}
+		}, this), function() {
+			if (error) {
+				error();
+			}
+		});
+	},
+
+	/**
+	 * Get all movies / shows in watchlist
+	 */
+	getCollectionMovies: function(success, error) {
+		ClientREST.get(Conf.traktTV.api_host + '/sync/collection/movies', { extended: 'images' }, _.bind(function(response) {
+			// Save data in user
+			this.set('collectionMovies', response);
 
 			if (success) {
 				success(response);

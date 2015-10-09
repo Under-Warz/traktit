@@ -10,7 +10,7 @@
 	</div>
 </div>
 <div class="swipeout-actions-right">
-	<a href="#" class="swipeout-close">List</a>
-	<a href="#" class="swipeout-close">Add</a>
-	<a href="#" class="swipeout-close">Check</a>
+	<a href="#" class="swipeout-close btn-toggle {{#if inWatchlist}}remove{{/if}}" data-action="watchlist"><i class="picto add-list"></i></a>
+	<a href="#" class="swipeout-close btn-toggle {{#if inCollection}}remove{{/if}}" data-action="collection"><i class="picto add"></i></a>
+	<a href="#" class="swipeout-close btn-toggle {{#if seenit}}remove{{/if}}" data-action="history"><i class="picto check"></i></a>
 </div>
