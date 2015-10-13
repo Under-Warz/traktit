@@ -29,11 +29,13 @@ module.exports = ChildCompositeView.extend({
         ChildCompositeView.prototype.onShow.call(this, this, null);
 
         // Bind add comment
-        $('.add-comment').click(this.showAddCommentPopup);
+        $('.add-comment').click(_.bind(this.showAddCommentPopup, this));
     },
 
     showAddCommentPopup: function(e) {
-        new AddCommentView;
+        new AddCommentView({
+            model: this.model
+        });
 
         e.preventDefault();
         return false;

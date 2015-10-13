@@ -13,7 +13,7 @@ module.exports = Marionnette.ItemView.extend({
         return _.extend({},this.originalEvents,this.additionalEvents);
     },
 
-    initialize: function() {
+    initialize: function(options) {
         this.render();
     },
 

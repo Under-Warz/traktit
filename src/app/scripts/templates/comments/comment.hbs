@@ -1,7 +1,7 @@
 <div class="card-header">
 	<div class="facebook-avatar"><img src="{{user.images.avatar.full}}" width="34" height="34"></div>
 	<div class="facebook-name">{{user.name}}</div>
-	<div class="facebook-date">{{created_at}}</div>
+	<div class="facebook-date">{{formatedCreatedAt}}</div>
 </div>
 <div class="card-content">
 	<div class="card-content-inner">
@@ -9,5 +9,6 @@
 	</div>
 </div>
 <div class="card-footer">
+	<a href="#" class="link">{{likeStr}}</a>
 	<a href="movies/{{getMovieSlug}}/comments/{{id}}/reply" class="link">Reply</a>
 </div>
