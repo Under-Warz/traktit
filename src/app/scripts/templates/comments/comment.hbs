@@ -1,0 +1,13 @@
+<div class="card-header">
+	<div class="facebook-avatar"><img src="{{user.images.avatar.full}}" width="34" height="34"></div>
+	<div class="facebook-name">{{user.name}}</div>
+	<div class="facebook-date">{{created_at}}</div>
+</div>
+<div class="card-content">
+	<div class="card-content-inner">
+		<p>{{comment}}</p>
+	</div>
+</div>
+<div class="card-footer">
+	<a href="movies/{{getMovieSlug}}/comments/{{id}}/reply" class="link">Reply</a>
+</div>

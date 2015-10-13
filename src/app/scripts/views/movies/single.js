@@ -25,7 +25,8 @@ module.exports = ChildItemView.extend({
 
     additionalEvents: {
         "click .btn-check": "toggleCheck",
-        "click .related .swiper-slide": "showRelatedMovie"
+        "click .related .swiper-slide": "showRelatedMovie",
+        "click .show-comments": "showComments"
     },
 
     onRender: function() {
@@ -81,6 +82,16 @@ module.exports = ChildItemView.extend({
         }
 
         window.router.navigate('movies/' + relatedMovie.ids.slug, { trigger: true });
+
+        e.preventDefault();
+        return false;
+    },
+
+    /**
+     * Show comments
+     */
+    showComments: function(e) {
+        window.router.navigate($(e.currentTarget).attr('href'), { trigger: true });
 
         e.preventDefault();
         return false;

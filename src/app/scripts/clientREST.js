@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var Conf = require('Conf');
 
 module.exports = {
@@ -16,6 +17,12 @@ module.exports = {
 	},
 
 	get: function(url, params, success, error) {
+		if (Conf.isDebug) {
+			var params = _.extend(params, {
+				'nocache': Math.random()
+			});
+		}
+
 		$.ajax({
 			url: url,
 			method: 'GET',
