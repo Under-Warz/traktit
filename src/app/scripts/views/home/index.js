@@ -1,8 +1,9 @@
-var Marionnette = require('marionette');
-var WatchedCollection = require('../../collections/watched.js');
-var ShowView = require('./show.js');
+var MainCompositeView = require('../mainCompositeView');
+var WatchedCollection = require('../../collections/watched');
+var ShowView = require('./show');
+var App = require('App');
 
-module.exports = Marionette.CompositeView.extend({
+module.exports = MainCompositeView.extend({
     template: require('../../templates/home/index.hbs'),
     childView: ShowView,
     childViewContainer: ".list-block ul",
@@ -23,6 +24,11 @@ module.exports = Marionette.CompositeView.extend({
         this.collection = new WatchedCollection;
 
         // Get watched shows
-        this.collection.getShows();
+        App.loader.show();
+        this.collection.getShows(function() {
+            App.loader.hide();
+        }, function() {
+            App.loader.hide();
+        });
     }
 });

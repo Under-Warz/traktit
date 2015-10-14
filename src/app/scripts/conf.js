@@ -1,28 +1,31 @@
+var _ = require('underscore');
+var tokens = require('./tokens');
+
 var conf = {
     dev: {
-        traktTV: {
-            client_id: "",
-            client_secret: "",
-            redirect_uri: "",
+        isDebug: true,
+        traktTV: _.extend(tokens.dev, {
             api_host: "http://api.staging.trakt.tv",
             api_version: 2
-        },
+        })
     },
     prod: {
-        traktTV: {
-            client_id: "",
-            client_secret: "",
-            redirect_uri: "",
+        isDebug: false,
+        traktTV: _.extend(tokens.prod, {
             api_host: "https://api-v2launch.trakt.tv",
             api_version: 2
-        },
+        })
     }
 };
 
 // This is Common conf
 var common = {
+    appname: "TraktIt",
     gcm: {
         senderID: ""
+    },
+    pagination: {
+        limit: 10
     }
 };
 

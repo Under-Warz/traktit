@@ -1,31 +1,14 @@
-require('marionette');
+var Marionette = require('marionette');
+var App = require('App');
 
 var F7Region = Marionette.Region.extend({
 	oldViews: null,
 	initialize: function() {
 		this.oldViews = [];
 	},
-    addView: function(view, options) {
-    	// If already view attached, append new one for transition
-    	if (this.currentView) {
-    		// Save old views for delete later only to reset view on region empty
-    		/*if ($(this.el).parent().hasClass('view-login')) {
-    			this.oldViews.push(this.currentView);
-    		}*/
-
-        	view.render();
-
-        	this.currentView = view;
-
-        	this.triggerMethod('show', view, this);
-      		Marionette.triggerMethodOn(view, 'show', view, this, true, true);
-
-      		return this;
-      	}
-      	else {
-      		this.show(view);
-      	}
-    }
+    attachHtml: function(view) {
+    	this.$el.append(view.el);
+  	}
 });
 
 module.exports = Marionette.LayoutView.extend({
@@ -37,17 +20,33 @@ module.exports = Marionette.LayoutView.extend({
 	},
 
 	events: {
+		"click .panel-left a": "navigateFromMenu",
+		"click .panel-right a": "didSelectFilter"
 	},
 
   	regions: {
-	   mainView: {
+	   	mainView: {
     		regionClass: F7Region,
     		selector: ".view-main .pages"
     	},
         loginView: {
             regionClass: F7Region,
             selector: ".view-login .pages"
+        },
+        moviesView: {
+            regionClass: F7Region,
+            selector: ".view-movies .pages"
         }
+  	},
+
+  	navigateFromMenu: function(e) {
+  		// Close menu
+  		window.f7.closePanel();
+
+  		this.navigate(e);
+
+  		e.preventDefault();
+        return false;
   	},
 
   	navigate: function(e) {
@@ -65,5 +64,15 @@ module.exports = Marionette.LayoutView.extend({
 
         e.preventDefault();
         return false;
+    },
+
+    didSelectFilter: function(e) {
+    	// Close menu
+    	window.f7.closePanel();
+    	
+    	App.triggerMethod('selectFilter', e);
+
+    	e.preventDefault();
+    	return false;
     }
 });

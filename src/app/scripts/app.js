@@ -3,6 +3,8 @@ var User = require('./models/user.js');
 
 var App = Marionette.Application.extend({
 	currentUser: null,
+	movies: null,
+	loader: null, // Common loader
 	
 	initialize: function(options) {
 		// Check if user token is in localStorage
@@ -10,6 +12,35 @@ var App = Marionette.Application.extend({
 		if (userData) {
 			this.currentUser = new User(JSON.parse(userData));
 		}
+
+		// Init movies
+		var movies = this.getPersistentData('movies');
+		if (movies) {
+			this.movies = JSON.parse(movies);
+		}
+		else {
+			this.movies = {};
+		}
+  	},
+
+  	savePersistentData: function(key, value) {
+  		if (window.cordova) {
+
+  		}
+  		else {
+			// Save in localStorage
+			localStorage.setItem(key, JSON.stringify(value));	
+  		}
+  	},
+
+  	getPersistentData: function(key) {
+  		if (window.cordova) {
+
+  		}
+  		else {
+  			var data = localStorage.getItem(key);
+  			return data;
+  		}
   	}
 });
 

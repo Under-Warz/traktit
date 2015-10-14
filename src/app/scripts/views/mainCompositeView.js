@@ -1,10 +1,8 @@
 var Marionnette = require('marionette');
 
 module.exports = Marionnette.CompositeView.extend({
-    activeView: '.view.active', // Default to current active view, this is need to be set for popup's navigation
     originalEvents: {
-        "click .navigate": "navigate",
-        "click .back": "back"
+        "click .navigate": "navigate"
     },
 
     additionalEvents: {
@@ -21,21 +19,11 @@ module.exports = Marionnette.CompositeView.extend({
         return false;
     },
 
-    back: function(e) {     
-        $(this.activeView)[0].f7View.router.back();
+    onShow: function() {
 
-        e.preventDefault();
-        return false;
     },
 
     onDestroy: function() {
         this.undelegateEvents();
-    },
-
-    onShow: function(view, region, load, f7view) {
-        $(this.activeView)[0].f7View.router.load({
-            content: this.el,
-            animatePages: true
-        });
     }
 });

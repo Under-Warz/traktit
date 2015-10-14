@@ -8,6 +8,7 @@
   "dependencies": {},
   "devDependencies": {
     "apache-server-configs": "^2.8.0",
+    "async": "^1.4.2",
     "backbone": "^1.2.3",
     "backbone.marionette": "^2.4.3",
     "bourbon": "^4.2.5",

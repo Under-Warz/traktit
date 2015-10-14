@@ -39,13 +39,9 @@ module.exports = Marionnette.ItemView.extend({
     },
 
     onShow: function(view, region, load, f7view) {
-        if (load) {
-            $(this.activeView)[0].f7View.router.load({
-                content: this.el,
-                animatePages: true
-            });
-
-            this.setElement(this.template); // Reload events
-        }
+        $(this.activeView)[0].f7View.router.load({
+            content: this.el,
+            animatePages: true
+        });
     }
 });

@@ -2,10 +2,16 @@ require('backbone');
 require('marionette');
 
 var App = require('App');
-var MainLayout = require('./views/layouts/main.js');
+var MainLayout = require('./views/layouts/main');
 
-var HomeView = require('./views/home/index.js');
-var LoginView = require('./views/login/login.js');
+var HomeView = require('./views/home/index');
+var LoginView = require('./views/login/login');
+var MoviesIndex = require('./views/movies/index');
+var MovieSingle = require('./views/movies/single');
+var CommentsView = require('./views/comments/list');
+
+var Movie = require('./models/movie');
+var Comments = require('./collections/comments');
 
 module.exports = Marionette.AppRouter.extend({
     layout: null,
@@ -35,7 +41,10 @@ module.exports = Marionette.AppRouter.extend({
 
     routes: {
         "": "getHome",
-        "login": "getLogin"
+        "login": "getLogin",
+        "movies": "getMovies",
+        "movies/:slug": "getSingleMovie",
+        "movies/:slug/comments": "getMovieComments"
     },
 
     /* Routes */
@@ -53,6 +62,31 @@ module.exports = Marionette.AppRouter.extend({
     getLogin: function() {
         var page = new LoginView;
         this.layout.loginView.show(page);
+    },
+
+    /* Movies */
+    getMovies: function() {
+        var page = new MoviesIndex;
+        this.layout.moviesView.show(page);
+    },
+
+    getSingleMovie: function(slug) {
+        var page = new MovieSingle({
+            model: new Movie(App.movies[slug])
+        });
+        this.layout.moviesView.show(page, {
+            preventDestroy: true
+        });
+    },
+
+    getMovieComments: function(slug) {
+        var page = new CommentsView({
+            model: new Movie(App.movies[slug]),
+            collection: new Comments(App.movies[slug].comments)
+        });
+        this.layout.moviesView.show(page, {
+            preventDestroy: true
+        });
     },
 
     /** Helpers **/

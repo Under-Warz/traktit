@@ -1,11 +1,12 @@
-require('jquery');
-require('backbone');
-require('framework7');
-var Handlebars = require('handlebars');
+var $ = require('jquery');
+var Backbone = require('backbone');
+var Framework7 = require('framework7');
+var HandlebarsHelpers = require('./hbs_helpers');
 
 var App = require('App');
 var Conf = require('Conf');
-var Router = require('./routes.js');
+var Router = require('./routes');
+var Loader = require('./views/loader');
 
 // Init app
 App.on('start', function() {
@@ -43,6 +44,18 @@ App.on('start', function() {
         domCache: true // Use to get deep back button work
     });
 
+    // Movies view
+    f7.addView('.view-movies', {
+        domCache: true, // Use to get deep back button work
+        dynamicNavbar: true
+    });
+
+    // Init loader
+    App.loader = new Loader({
+        in: $('body'),
+        id: 'loader'
+    });
+
     // Attache current Marionette view to Framework7 page for delete
     f7.onPageInit('*', function(page) {
         var viewSelector = page.view.selector;
@@ -56,13 +69,17 @@ App.on('start', function() {
             case '.view-login':
                 page.context = window.router.layout.loginView.currentView;
                 break;
+
+            case '.view-movies':
+                page.context = window.router.layout.moviesView.currentView;
+                break;
         }
     });
 
     /**
      * Destroy Marionette view after back
      */
-    f7.onPageBack('*', function(page) {
+    f7.onPageAfterBack('*', function(page) {
         page.context.destroy(); // On back, destroy the BM's view attach to the F7's Page
     });
 
@@ -133,14 +150,3 @@ function onResume() {
 function onPause() {
     
 }
-
-
-/**
- * Register all your Handlebars helpers / partials
- */
-
-// Each with limit
-Handlebars.registerHelper('limit', function (arr, limit) {
-    if (!_.isArray(arr)) { return []; } // remove this line if you don't want the lodash/underscore dependency
-    return arr.slice(0, limit);
-});
