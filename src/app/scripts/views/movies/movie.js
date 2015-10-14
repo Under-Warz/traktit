@@ -29,15 +29,24 @@ module.exports = Marionette.ItemView.extend({
         var action = $(e.currentTarget).data('action');
 
         // Uncheck
+        App.loader.show();
         if ($(e.currentTarget).hasClass('remove')) {
             this.model.removeFrom(action, function() {
+                App.loader.hide();
+
                 $(e.currentTarget).removeClass('remove');
+            }, function() {
+                App.loader.hide();
             });
         }
         // Check
         else {
             this.model.addTo(action, function() {
+                App.loader.hide();
+
                 $(e.currentTarget).addClass('remove');
+            }, function() {
+                App.loader.hide();
             });
         }
 

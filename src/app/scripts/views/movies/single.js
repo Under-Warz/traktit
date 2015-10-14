@@ -30,7 +30,7 @@ module.exports = ChildItemView.extend({
     },
 
     additionalEvents: {
-        "click .btn-check": "toggleCheck",
+        "click .btn-toggle": "toggleAction",
         "click .related .swiper-slide": "showRelatedMovie",
         "click .show-comments": "showComments",
         "click .btn-rate": "showRatePicker",
@@ -58,19 +58,30 @@ module.exports = ChildItemView.extend({
     },
 
     /**
-     * Check / uncheck movie
+     * Toggle movie action (history, collection, watchlist)
      */
-    toggleCheck: function(e) {
+    toggleAction: function(e) {
+        var action = $(e.currentTarget).data('action');
+
         // Uncheck
-        if ($(e.currentTarget).hasClass('uncheck')) {
-            this.model.removeFromHistory(function() {
-                $(e.currentTarget).removeClass('uncheck');
+        App.loader.show();
+        if ($(e.currentTarget).hasClass('remove')) {
+            this.model.removeFrom(action, function() {
+                App.loader.hide();
+
+                $(e.currentTarget).removeClass('remove');
+            }, function() {
+                App.loader.hide();
             });
         }
         // Check
         else {
-            this.model.addToHistory(function() {
-                $(e.currentTarget).addClass('uncheck');
+            this.model.addTo(action, function() {
+                App.loader.hide();
+
+                $(e.currentTarget).addClass('remove');
+            }, function() {
+                App.loader.hide();
             });
         }
 

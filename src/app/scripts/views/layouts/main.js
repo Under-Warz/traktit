@@ -58,7 +58,7 @@ module.exports = Marionette.LayoutView.extend({
   			$(view).addClass('active');
   		}
 
-  		if ($(e.currentTarget).attr('href') != "") {
+  		if ($(e.currentTarget).attr('href') != "" && $(view).find('.page').length == 0) {
         	window.router.navigate($(e.currentTarget).attr('href'), { trigger: true });
         }
 

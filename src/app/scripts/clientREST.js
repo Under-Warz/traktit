@@ -53,12 +53,11 @@ module.exports = {
 			params = JSON.stringify(postParams);
 		}
 
-		$.ajax({
+		var ajax = {
 			url: url,
 			method: method,
 			data: params,
 			dataType: 'json',
-			//contentType: 'application/json',
 			beforeSend: _.bind(function(xhr) {
 				this._constructHeader(api, xhr);
 			}, this),
@@ -72,6 +71,14 @@ module.exports = {
 					error(response.responseJSON);
 				}
 			}
-		});
+		};
+
+		if (api == 'trakttv') {
+			ajax = _.extend(ajax, {
+				contentType: 'application/json'
+			});
+		}
+
+		$.ajax(ajax);
 	}
 }
