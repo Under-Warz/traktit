@@ -32,3 +32,4 @@ app-mobile/platforms/wp8/.staging
 app-mobile/platforms/wp8/*.suo
 app-mobile/platforms/wp8/*.csproj.user
 app-mobile/resources/signing
+src/app/scripts/tokens.js
