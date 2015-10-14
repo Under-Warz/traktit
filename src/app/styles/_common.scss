@@ -1,3 +1,8 @@
+@mixin border-radius($radius) {
+  @include border-top-radius($radius);
+  @include border-bottom-radius($radius);
+}
+
 body {
 	-webkit-font-smoothing: antialiased;
 }
@@ -103,3 +108,31 @@ body {
  .facebook-card .card-content-inner {
  	padding: 15px 10px;
  }  
+
+/**
+ * Loader
+ */
+ .loader {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 100px;
+	height: 100px;
+	margin-left: -50px;
+	margin-top: -50px;
+	background: rgba(0, 0, 0, 0.7);
+	@include border-radius(10px);
+	z-index: 9999999;
+	text-align: center;
+	display: none;
+
+	span {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-top: -20px;
+		margin-left: -20px;
+		width: 40px;
+		height: 40px;
+	}
+}

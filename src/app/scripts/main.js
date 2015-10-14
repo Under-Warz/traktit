@@ -5,7 +5,8 @@ var HandlebarsHelpers = require('./hbs_helpers');
 
 var App = require('App');
 var Conf = require('Conf');
-var Router = require('./routes.js');
+var Router = require('./routes');
+var Loader = require('./views/loader');
 
 // Init app
 App.on('start', function() {
@@ -47,6 +48,12 @@ App.on('start', function() {
     f7.addView('.view-movies', {
         domCache: true, // Use to get deep back button work
         dynamicNavbar: true
+    });
+
+    // Init loader
+    App.loader = new Loader({
+        in: $('body'),
+        id: 'loader'
     });
 
     // Attache current Marionette view to Framework7 page for delete

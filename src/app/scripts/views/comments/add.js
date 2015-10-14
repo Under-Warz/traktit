@@ -1,5 +1,6 @@
 var PopupView = require('../popup');
 var Comment = require('../../models/comment');
+var App = require('App');
 
 // Model : single movie
 // Collection : comments of movie
@@ -36,7 +37,10 @@ module.exports = PopupView.extend({
 				spoiler: this.$el.find('input[name="spoiler"]').is(':checked')
 			});
 
+			App.loader.show();
 			commentObj.post(_.bind(function(response) {
+				App.loader.hide();
+
 				// Append comment in movie & collection
 				this.collection.add(commentObj.toJSON());
 
@@ -45,6 +49,7 @@ module.exports = PopupView.extend({
 
 				this.closePopup();
 			}, this), function(response) {
+				App.loader.hide();
 				if (response.errors) {
 					alert(response.errors.comment);
 				}

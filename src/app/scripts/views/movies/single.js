@@ -15,11 +15,15 @@ module.exports = ChildItemView.extend({
     },
 
     initialize: function() {
-        // Load movie
+        // Load movie if no data loaded previously or in storage
         if (this.model.get('fetched') == false) {
+            App.loader.show();
             this.model.fetch(_.bind(function() {
+                App.loader.hide();
                 this.render();
-            }, this));
+            }, this), function() {
+                App.loader.hide();
+            });
         }
     },
 
@@ -93,9 +97,12 @@ module.exports = ChildItemView.extend({
     showComments: function(e) {
         // Load movie's comment if not loaded yet
         if (!this.model.has('comments')) {
+            App.loader.show();
             this.model.fetchComments({}, _.bind(function(response) {
+                App.loader.hide();
                 window.router.navigate($(e.currentTarget).attr('href'), { trigger: true });
             }, this), function() {
+                App.loader.hide();
                 alert('Cannot load comments');
             });
         }
