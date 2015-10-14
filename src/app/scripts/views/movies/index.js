@@ -32,15 +32,19 @@ module.exports = MainCompositeView.extend({
         this.currentFilter = 'trending';
 
         // Get movies (trending by default)
+        App.loader.show();
         this.collection.getList({
             type: this.currentFilter
         }, {}, _.bind(function() {
+            App.loader.hide();
             // Save for filter switching
             this.previousCollections.trending = {
                 page: this.page,
                 models: this.collection.toJSON()
             }
-        }, this));
+        }, this), function() {
+            App.loader.hide();
+        });
 
         App.on('selectFilter', _.bind(function(e) {
             var filter = $(e.currentTarget).data('filter');
@@ -61,8 +65,13 @@ module.exports = MainCompositeView.extend({
                 this.page = 1;
 
                 // Update list
+                App.loader.show();
                 this.collection.getList({
                     type: filter
+                }, function() {
+                    App.loader.hide();
+                }, function() {
+                    App.loader.hide();
                 });
             }
 

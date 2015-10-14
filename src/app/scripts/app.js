@@ -4,6 +4,7 @@ var User = require('./models/user.js');
 var App = Marionette.Application.extend({
 	currentUser: null,
 	movies: null,
+	loader: null, // Common loader
 	
 	initialize: function(options) {
 		// Check if user token is in localStorage

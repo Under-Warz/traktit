@@ -1,6 +1,7 @@
 var MainCompositeView = require('../mainCompositeView');
 var WatchedCollection = require('../../collections/watched');
 var ShowView = require('./show');
+var App = require('App');
 
 module.exports = MainCompositeView.extend({
     template: require('../../templates/home/index.hbs'),
@@ -23,6 +24,11 @@ module.exports = MainCompositeView.extend({
         this.collection = new WatchedCollection;
 
         // Get watched shows
-        this.collection.getShows();
+        App.loader.show();
+        this.collection.getShows(function() {
+            App.loader.hide();
+        }, function() {
+            App.loader.hide();
+        });
     }
 });
