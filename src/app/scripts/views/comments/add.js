@@ -1,6 +1,8 @@
 var PopupView = require('../popup');
 var Comment = require('../../models/comment');
 
+// Model : single movie
+// Collection : comments of movie
 module.exports = PopupView.extend({
     id: 'popup-add-comment',
     template: require('../../templates/comments/add.hbs'),
@@ -21,16 +23,33 @@ module.exports = PopupView.extend({
 			ids: this.model.get('ids')
 		};
 
-		var comment = new Comment({
-			movie: movie,
-			comment: this.$el.find('textarea[name="comment"]').val()
-		});
+		var comment = this.$el.find('textarea[name="comment"]').val();
 
-		comment.post(_.bind(function(response) {
-			this.closePopup();
-		}, this), function() {
-			alert('Error');
-		});
+		// Check comment size
+		if (comment.split(' ').length < 5) {
+			alert('must be 5 word least');
+		}
+		else {
+			var commentObj = new Comment({
+				movie: movie,
+				comment: comment,
+				spoiler: this.$el.find('input[name="spoiler"]').is(':checked')
+			});
+
+			commentObj.post(_.bind(function(response) {
+				// Append comment in movie & collection
+				this.collection.add(commentObj.toJSON());
+
+				this.model.get('comments').push(commentObj.toJSON());
+				this.model.save(true);
+
+				this.closePopup();
+			}, this), function(response) {
+				if (response.errors) {
+					alert(response.errors.comment);
+				}
+			});
+		}
 
 		e.preventDefault();
 		return false;

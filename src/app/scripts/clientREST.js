@@ -37,9 +37,9 @@ module.exports = {
 					success(response);
 				}
 			}, this),
-			error: function() {
+			error: function(response) {
 				if (error) {
-					error();
+					error(response.responseJSON);
 				}
 			}
 		})
@@ -60,9 +60,9 @@ module.exports = {
 					success(response);
 				}
 			}, this),
-			error: function() {
+			error: function(response) {
 				if (error) {
-					error();
+					error(response.responseJSON);
 				}
 			}
 		})

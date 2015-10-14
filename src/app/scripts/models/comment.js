@@ -6,7 +6,8 @@ var moment = require('moment');
 
 module.exports = Backbone.Model.extend({
 	defaults: {
-		likes: 0
+		likes: 0,
+		spoiler: false
 	},
 
 	initialize: function() {
@@ -23,7 +24,7 @@ module.exports = Backbone.Model.extend({
 	 * Post comment
 	 */
 	post: function(success, error) {
-		ClientREST.post(Conf.traktTV.api_host + '/comments', this.toJSON(), _.bind(function(response) {
+		ClientREST.post(Conf.traktTV.api_host + '/comments?extended=images', this.toJSON(), _.bind(function(response) {
 			if (response.id) {
 				// Update model
 				this.set(response);
@@ -37,9 +38,9 @@ module.exports = Backbone.Model.extend({
 					error();
 				}
 			}
-		}, this), function() {
+		}, this), function(response) {
 			if (error) {
-				error();
+				error(response);
 			}
 		});
 	}

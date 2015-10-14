@@ -34,7 +34,8 @@ module.exports = ChildCompositeView.extend({
 
     showAddCommentPopup: function(e) {
         new AddCommentView({
-            model: this.model
+            model: this.model,
+            collection: this.collection
         });
 
         e.preventDefault();
