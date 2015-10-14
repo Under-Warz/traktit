@@ -2,7 +2,22 @@ var _ = require('underscore');
 var Conf = require('Conf');
 
 module.exports = {
-	constructHeader: function(xhr) {
+	get: function(url, params, success, error) {
+		this._request('GET', url, params, null, success, error);
+	},
+
+	post: function(url, params, success, error) {
+		this._request('POST', url, null, params, success, error);
+	},
+
+	delete: function(url, params, success, error) {
+		this._request('DELETE', url, null, params, success, error);
+	},
+
+	/**
+	 * Private methods
+	 */
+ 	_constructHeader: function(xhr) {
 		var access_token;
 		var currentUser = localStorage.getItem('currentUser');
 		
@@ -16,21 +31,29 @@ module.exports = {
 		xhr.setRequestHeader("Authorization", "Bearer " + access_token);
 	},
 
-	get: function(url, params, success, error) {
+	_request: function(method, url, getParams, postParams, success, error) {
 		if (Conf.isDebug) {
-			var params = _.extend(params, {
+			var getParams = _.extend(getParams, {
 				'nocache': Math.random()
 			});
 		}
 
+		var params;
+		if (method == 'GET') {
+			params = getParams;
+		}
+		else {
+			params = postParams;
+		}
+
 		$.ajax({
 			url: url,
-			method: 'GET',
+			method: method,
 			data: params,
 			dataType: 'json',
 			contentType: 'application/json',
 			beforeSend: _.bind(function(xhr) {
-				this.constructHeader(xhr);
+				this._constructHeader(xhr);
 			}, this),
 			success: _.bind(function(response) {
 				if (success) {
@@ -42,29 +65,6 @@ module.exports = {
 					error(response.responseJSON);
 				}
 			}
-		})
-	},
-
-	post: function(url, params, success, error) {
-		$.ajax({
-			url: url,
-			method: 'POST',
-			data: JSON.stringify(params),
-			dataType: 'json',
-			contentType: 'application/json',
-			beforeSend: _.bind(function(xhr) {
-				this.constructHeader(xhr);
-			}, this),
-			success: _.bind(function(response) {
-				if (success) {
-					success(response);
-				}
-			}, this),
-			error: function(response) {
-				if (error) {
-					error(response.responseJSON);
-				}
-			}
-		})
+		});
 	}
 }

@@ -10,4 +10,8 @@
 	.card-content-inner {
 		@include transition(opacity 0.2s ease-in-out, text-shadow 0.5s ease-in-out, color 0.5s ease-in-out);
 	}
+
+	.liked {
+		color: #007aff;
+	}
 }
