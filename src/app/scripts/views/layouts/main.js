@@ -21,7 +21,8 @@ module.exports = Marionette.LayoutView.extend({
 
 	events: {
 		"click .panel-left a": "navigateFromMenu",
-		"click .panel-right a": "didSelectFilter"
+		"click .panel-right a": "didSelectFilter",
+    "click .search": "showSearch"
 	},
 
   	regions: {
@@ -74,5 +75,12 @@ module.exports = Marionette.LayoutView.extend({
 
     	e.preventDefault();
     	return false;
+    },
+
+    showSearch: function(e) {
+      window.router.navigate($(e.currentTarget).attr('href'), { trigger: true });
+      
+      e.preventDefault();
+      return false;
     }
 });
