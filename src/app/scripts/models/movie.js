@@ -70,13 +70,6 @@ module.exports = Backbone.Model.extend({
 				}, function() {
 					callback("error", 'fetchRelated');
 				});
-			}, this),
-			_.bind(function(callback) {
-				this.fetchComments({}, function(response) {
-					callback(null, 'fetchComments');
-				}, function() {
-					callback("error", 'fetchComments');
-				});
 			}, this)
 		], _.bind(function(err, results) {
 			if (err == null) {

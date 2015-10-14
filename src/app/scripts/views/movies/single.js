@@ -91,7 +91,17 @@ module.exports = ChildItemView.extend({
      * Show comments
      */
     showComments: function(e) {
-        window.router.navigate($(e.currentTarget).attr('href'), { trigger: true });
+        // Load movie's comment if not loaded yet
+        if (!this.model.has('comments')) {
+            this.model.fetchComments({}, _.bind(function(response) {
+                window.router.navigate($(e.currentTarget).attr('href'), { trigger: true });
+            }, this), function() {
+                alert('Cannot load comments');
+            });
+        }
+        else {
+            window.router.navigate($(e.currentTarget).attr('href'), { trigger: true });
+        }
 
         e.preventDefault();
         return false;

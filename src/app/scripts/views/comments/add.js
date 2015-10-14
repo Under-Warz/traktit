@@ -41,7 +41,7 @@ module.exports = PopupView.extend({
 				this.collection.add(commentObj.toJSON());
 
 				this.model.get('comments').push(commentObj.toJSON());
-				this.model.save(true);
+				this.model.save();
 
 				this.closePopup();
 			}, this), function(response) {
