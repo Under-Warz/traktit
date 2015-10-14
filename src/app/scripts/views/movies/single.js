@@ -1,5 +1,6 @@
 var ChildItemView = require('../childItemView');
 var App = require('App');
+var Conf = require('Conf');
 var moment = require('moment');
 
 module.exports = ChildItemView.extend({
@@ -32,7 +33,8 @@ module.exports = ChildItemView.extend({
         "click .btn-check": "toggleCheck",
         "click .related .swiper-slide": "showRelatedMovie",
         "click .show-comments": "showComments",
-        "click .rate": "showRatePicker"
+        "click .btn-rate": "showRatePicker",
+        "click .btn-share": "shareMovie"
     },
 
     onRender: function() {
@@ -173,5 +175,17 @@ module.exports = ChildItemView.extend({
         }, this), function() {
             App.loader.hide();
         });
+    },
+
+    /**
+     * Share the movie
+     */
+    shareMovie: function(e) {
+        if (window.cordova) {
+            window.plugins.socialsharing.share(this.model.get('title') + '-' + this.model.get('year'), Conf.appname, this.model.get('images').poster.medium, "http://www.trakt.tv/movies/" + this.model.get('ids').slug);
+        }
+
+        e.preventDefault();
+        return false;
     }
 });
