@@ -239,8 +239,15 @@ module.exports = Backbone.Model.extend({
 
 		ClientREST.get(Conf.traktTV.api_host + '/movies/' + this.get('ids').slug + '/comments', _.extend(parameters, params), _.bind(function(response) {
 			if (response) {
-				// Update model
-				this.set('comments', response); // TODO: save comments collection
+				if (this.get('comments')) {
+					// Merge comments with new ones
+					var comments = this.get('comments').concat(response);
+					this.set('comments', comments);
+				}
+				else {
+					// Update model
+					this.set('comments', response);
+				}
 			}
 
 			// Save
