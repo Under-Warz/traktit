@@ -114,5 +114,22 @@ module.exports = Backbone.Model.extend({
 				error();
 			}
 		});
+	},
+
+	/** 
+	 * Add a rating
+	 */
+	postRating: function(params, success, error) {
+		ClientREST.post(Conf.traktTV.api_host + '/sync/ratings', params, _.bind(function(response) {
+			console.log(response);
+			
+			if (success()) {
+				success(response);
+			}
+		}, this), function() {
+			if (error) {
+				error();
+			}
+		});
 	}
 });

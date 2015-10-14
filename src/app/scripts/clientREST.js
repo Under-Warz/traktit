@@ -43,7 +43,7 @@ module.exports = {
 			params = getParams;
 		}
 		else {
-			params = postParams;
+			params = JSON.stringify(postParams);
 		}
 
 		$.ajax({

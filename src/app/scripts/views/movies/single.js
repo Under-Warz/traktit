@@ -1,5 +1,6 @@
 var ChildItemView = require('../childItemView');
 var App = require('App');
+var moment = require('moment');
 
 module.exports = ChildItemView.extend({
     template: require('../../templates/movies/single.hbs'),
@@ -30,7 +31,8 @@ module.exports = ChildItemView.extend({
     additionalEvents: {
         "click .btn-check": "toggleCheck",
         "click .related .swiper-slide": "showRelatedMovie",
-        "click .show-comments": "showComments"
+        "click .show-comments": "showComments",
+        "click .rate": "showRatePicker"
     },
 
     onRender: function() {
@@ -112,5 +114,64 @@ module.exports = ChildItemView.extend({
 
         e.preventDefault();
         return false;
+    },
+
+    /**
+     * Show rating picker
+     */
+    showRatePicker: function(e) {
+        var values = [
+            '1 - Weak sauce :(',
+            '2 - Terrible',
+            '3 - Bad',
+            '4 - Poor',
+            '5 - Meh',
+            '6 - Fair',
+            '7 - Good',
+            '8 - Great',
+            '9 - Superb',
+            '10 - Totally ninja!'
+        ];
+
+        var picker = window.f7.picker({
+            rotateEffect: true,
+            toolbarTemplate: require('../../templates/partials/rate_toolbar.hbs')(),
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: values
+                }
+            ],
+            onOpen: _.bind(function(picker) {
+                picker.container.find('.done').click(_.bind(function() {
+                    var value = _.indexOf(values, picker.value[0]);
+                    this.saveRating(picker, value);
+                }, this));
+            }, this)
+        });
+
+        picker.open();
+
+        e.preventDefault();
+        return false;
+    },
+
+    saveRating: function(picker, value) {
+        var movie = {
+            rated_at: moment().utc().toISOString(),
+            rating: value,
+            ids: this.model.get('ids')
+        };
+
+        App.loader.show();
+        App.currentUser.postRating({ movies: [movie] }, _.bind(function(response) {
+            App.loader.hide();
+
+            // Close picker
+            picker.close();
+            
+        }, this), function() {
+            App.loader.hide();
+        });
     }
 });
