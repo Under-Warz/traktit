@@ -17,18 +17,20 @@ module.exports = {
 	/**
 	 * Private methods
 	 */
- 	_constructHeader: function(xhr) {
-		var access_token;
-		var currentUser = localStorage.getItem('currentUser');
-		
-		if (currentUser) {
-			currentUser = JSON.parse(currentUser);
-			access_token = currentUser.access_token;
-		}
+ 	_constructHeader: function(api, xhr) {
+ 		if (api == 'trakttv') {
+			var access_token;
+			var currentUser = localStorage.getItem('currentUser');
+			
+			if (currentUser) {
+				currentUser = JSON.parse(currentUser);
+				access_token = currentUser.access_token;
+			}
 
-		xhr.setRequestHeader("trakt-api-key", Conf.traktTV.client_id);
-		xhr.setRequestHeader("trakt-api-version", Conf.traktTV.api_version);
-		xhr.setRequestHeader("Authorization", "Bearer " + access_token);
+			xhr.setRequestHeader("trakt-api-key", Conf.traktTV.client_id);
+			xhr.setRequestHeader("trakt-api-version", Conf.traktTV.api_version);
+			xhr.setRequestHeader("Authorization", "Bearer " + access_token);
+		}
 	},
 
 	_request: function(method, url, getParams, postParams, success, error) {
@@ -36,6 +38,11 @@ module.exports = {
 			var getParams = _.extend(getParams, {
 				'nocache': Math.random()
 			});
+		}
+
+		var api;
+		if (url.indexOf(Conf.traktTV.api_host) > -1) {
+			api = 'trakttv';
 		}
 
 		var params;
@@ -51,9 +58,9 @@ module.exports = {
 			method: method,
 			data: params,
 			dataType: 'json',
-			contentType: 'application/json',
+			//contentType: 'application/json',
 			beforeSend: _.bind(function(xhr) {
-				this._constructHeader(xhr);
+				this._constructHeader(api, xhr);
 			}, this),
 			success: _.bind(function(response) {
 				if (success) {

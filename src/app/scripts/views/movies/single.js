@@ -182,7 +182,7 @@ module.exports = ChildItemView.extend({
      */
     shareMovie: function(e) {
         if (window.cordova) {
-            window.plugins.socialsharing.share(this.model.get('title') + '-' + this.model.get('year'), Conf.appname, this.model.get('images').poster.medium, "http://www.trakt.tv/movies/" + this.model.get('ids').slug);
+            window.plugins.socialsharing.share(this.model.get('title') + '-' + this.model.get('year'), Conf.appname, null, "http://www.trakt.tv/movies/" + this.model.get('ids').slug);
         }
 
         e.preventDefault();

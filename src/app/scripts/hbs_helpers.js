@@ -10,6 +10,15 @@ function initialize() {
 	    return arr.slice(0, limit);
 	});
 
+	// Join helpers
+	Handlebars.registerHelper( "join", function( array, sep, options ) {
+		if (array) {
+	    	return array.map(function( item ) {
+	        	return options.fn( item );
+	    	}).join( sep );
+	    }
+	});
+
 	Handlebars.registerPartial("actor", require('./templates/partials/actor_slider.hbs'));
 
 	Handlebars.registerPartial("movie", require('./templates/partials/movie_slider.hbs'));

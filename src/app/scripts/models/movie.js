@@ -51,6 +51,13 @@ module.exports = Backbone.Model.extend({
 				});
 			}, this),
 			_.bind(function(callback) {
+				this.fetchOMDBDatas(function(response) {
+					callback(null, 'fetchOMDBDatas');
+				}, function() {
+					callback("error", 'fetchOMDBDatas');
+				});
+			}, this),
+			_.bind(function(callback) {
 				this.fetchCasting(function(response) {
 					callback(null, 'fetchCasting');
 				}, function() {
@@ -160,7 +167,7 @@ module.exports = Backbone.Model.extend({
 			if (response) {
 				// Update model
 				this.set('cast', response.cast);
-				this.set('crew', response.crew);
+				//this.set('crew', response.crew);
 			}
 
 			// Save
@@ -254,6 +261,38 @@ module.exports = Backbone.Model.extend({
 				error();
 			}
 		});
+	},
+
+	// Get OMDB's data
+	fetchOMDBDatas: function(success, error) {
+		var imdbID = this.get('ids').imdb;
+
+		if (imdbID) {
+			ClientREST.get(Conf.omdb.api_host, { i: imdbID }, _.bind(function(response) {
+				if (response) {
+					this.set('director', response.Director);
+					this.set('genres', response.Genre.split(', '));
+					this.set('language', response.Language);
+					this.set('runtime', response.Runtime);
+
+					// Save
+					this.save();
+				}
+
+				if (success) {
+					success(response);
+				}
+			}, this), function() {
+				if (error) {
+					error();
+				}
+			});
+		}
+		else {
+			if (error) {
+				error();
+			}
+		}
 	},
 
 	/** 

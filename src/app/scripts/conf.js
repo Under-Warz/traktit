@@ -26,6 +26,9 @@ var common = {
     },
     pagination: {
         limit: 10
+    },
+    omdb: {
+        api_host: "http://www.omdbapi.com"
     }
 };
 
