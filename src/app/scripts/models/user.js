@@ -102,7 +102,7 @@ module.exports = Backbone.Model.extend({
 	 * Get all comments likes of the user
 	 */
 	getCommentsLikes: function(success, error) {
-		ClientREST.get(Conf.traktTV.api_host + '/users/likes/comments', {}, _.bind(function(response) {
+		ClientREST.get(Conf.traktTV.api_host + '/users/likes/comments', { limit: -1 }, _.bind(function(response) {
 			// Save data in user
 			this.set('commentsLikes', response);
 
