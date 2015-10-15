@@ -84,7 +84,7 @@ module.exports = Marionette.AppRouter.extend({
         var page = new MovieSingle({
             model: new Movie(App.movies[slug])
         });
-        this.layout.moviesView.show(page, {
+        this.getActiveView().show(page, {
             preventDestroy: true
         });
     },
@@ -94,7 +94,7 @@ module.exports = Marionette.AppRouter.extend({
             model: new Movie(App.movies[slug]),
             collection: new Comments(App.movies[slug].comments)
         });
-        this.layout.moviesView.show(page, {
+        this.getActiveView().show(page, {
             preventDestroy: true
         });
     },
@@ -106,6 +106,20 @@ module.exports = Marionette.AppRouter.extend({
         }
         else {
             return true;
+        }
+    },
+
+    getActiveView: function() {
+        var activeView = $('.view.active');
+
+        if (activeView.hasClass('view-main')) {
+            return this.layout.mainView;
+        }
+        else if (activeView.hasClass('view-login')) {
+            return this.layout.loginView;
+        }
+        else if (activeView.hasClass('view-movies')) {
+            return this.layout.moviesView;
         }
     }
 });

@@ -1,6 +1,6 @@
 var MainCompositeView = require('../mainCompositeView');
 var MoviesCollection = require('../../collections/movies');
-var MovieView = require('./movie.js');
+var MovieView = require('./movie');
 var App = require('App');
 
 module.exports = MainCompositeView.extend({
