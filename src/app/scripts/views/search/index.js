@@ -18,6 +18,14 @@ module.exports = ChildCompositeView.extend({
         }
     },
     childViewContainer: ".list-block ul",
+    loading: false,
+    page: 1,
+    query: null,
+
+    additionalEvents: {
+        "infinite .infinite-scroll": "loadNextPage",
+        "keypress input[name='search']": "makeSearch"
+    },
 
     attributes: function() {
         return {
@@ -38,9 +46,69 @@ module.exports = ChildCompositeView.extend({
         window.f7.searchbar(this.$el.find('.searchbar'), {
             customSearch: true,
             onSearch: _.bind(function(s) {
-                var query = s.query;
-                this.collection.search(query);
+                this.query = s.query;
             }, this)
         });
+
+        // Hide loader
+        this.$el.find('.infinite-scroll-preloader').hide();
+    },
+
+    /**
+     * Perform search
+     */
+    makeSearch: function(e) {
+        if (this.query != "" && this.query != null) {
+            if (e.keyCode == 13) {
+                // Scroll top
+                this.$el.find('.page-content').scrollTop(0);
+                
+                // Reinit page
+                this.page = 1;
+
+                // Reattach infinite
+                window.f7.attachInfiniteScroll(this.$el.find('.infinite-scroll'));  
+
+                var searchbar = this.$el.find('.searchbar')[0].f7Searchbar;
+
+                App.loader.show();
+                this.collection.search({ page: 1, query: this.query }, function() {
+                    App.loader.hide();
+                }, function() {
+                    App.loader.hide();
+                });
+            }
+        }
+    },
+
+    /**
+     * Pagination
+     */
+    loadNextPage: function() {
+        if (this.loading) return;
+
+        this.loading = true;
+        this.page++;
+
+        this.collection.search({ query: this.query, page: this.page }, _.bind(function(response) {
+            this.loading = false;
+
+            if (response.length == 0) {
+                // Stop infinite scroll
+                window.f7.detachInfiniteScroll(this.$el.find('.infinite-scroll'));
+
+                // Remove preloader
+                this.$el.find('.infinite-scroll-preloader').hide();
+            }
+
+        }, this), _.bind(function() {
+            this.loading = false;
+
+            // Stop infinite scroll
+            window.f7.detachInfiniteScroll(this.$el.find('.infinite-scroll'));
+
+            // Remove preloader
+            this.$el.find('.infinite-scroll-preloader').hide();
+        }, this));
     }
 });

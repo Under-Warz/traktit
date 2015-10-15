@@ -15,17 +15,19 @@ module.exports = Backbone.Collection.extend({
 	    }
 	},
 
-	search: function(query, success, error) {
-		ClientREST.get(Conf.traktTV.api_host + '/search', { query: query, type: "movie,show", extended: "images" }, _.bind(function(response) {
+	search: function(params, success, error) {
+		ClientREST.get(Conf.traktTV.api_host + '/search', _.extend(params, { limit: Conf.pagination.limit, type: "movie,show", extended: "images" }), _.bind(function(response) {
 			// Empty collection first
-			this.reset();
-			
+			if (params.page == 1) {
+				this.reset();
+			}
+
 			if (response.length) {
 				this.add(response);
 			}
 
     		if (success) {
-    			success();
+    			success(response);
     		}
         }, this), function() {
 			if (error) {

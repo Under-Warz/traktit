@@ -11,6 +11,10 @@ module.exports = Marionette.ItemView.extend({
         "click .btn-toggle": "toggleAction"
     },
 
+    serializeData: function() {
+        return this.model.toJSON();
+    },
+
     showMovie: function(e) {
     	if (App.movies[this.model.get('ids').slug] == null) {
     		App.movies[this.model.get('ids').slug] = this.model.toJSON();
