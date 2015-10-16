@@ -37,6 +37,10 @@ module.exports = Marionette.LayoutView.extend({
         moviesView: {
             regionClass: F7Region,
             selector: ".view-movies .pages"
+        },
+        showsView: {
+            regionClass: F7Region,
+            selector: ".view-shows .pages"
         }
   	},
 

@@ -40,14 +40,8 @@ module.exports = MainItemView.extend({
             this.connect.addEventListener('loaderror', _.bind(this.connectError, this));
         }
         else {
-            var fakeResponse = {
-                access_token: "419389748576700183616b55984b5cf9c22445803b970f1633fd8d385d3bbc2f",
-                created_at: 1443791697,
-                expires_in: 7776000,
-                refresh_token: "5801ceb70fa90bd7bc4e6b41c0679f9fedd951aef52dfe7861d0794eb50fafa9",
-                scope: "public",
-                token_type: "bearer"
-            };
+            // PROD fake account
+            var fakeResponse = Conf.traktTV.fake_account;
 
             this.didConnect(fakeResponse);
         }

@@ -3,7 +3,7 @@ var Marionnette = require('marionette');
 module.exports = Marionette.CompositeView.extend({
     template: require('../../templates/home/show.hbs'),
     tagName: 'li',
-    className: 'swipeout show',
+    className: 'swipeout',
 
     initialize: function() {
     	this.model.on('change', this.updateEpisode, this);

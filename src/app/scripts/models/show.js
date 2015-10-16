@@ -4,6 +4,22 @@ var Conf = require('Conf');
 var moment = require('moment');
 
 module.exports = Backbone.Model.extend({
+	
+	toJSON: function() {
+		// Set banner image
+		var banner;
+		if (this.get('images').thumb) {
+			banner = this.get('images').thumb.full;
+		}
+		else {
+			banner = this.get('images').fanart.medium;
+		}
+		this.set('banner', banner);
+
+		var json = Backbone.Model.prototype.toJSON.apply(this, arguments);
+        return json;
+	},
+
 	/**
 	 * Get last episode to watch in the current show
 	 */

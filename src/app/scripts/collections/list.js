@@ -3,16 +3,32 @@ var Backbone = require('backbone');
 var Conf = require('Conf');
 var ClientREST = require('ClientREST');
 var Movie = require('../models/movie');
+var Show = require('../models/show');
 var App = require('App');
 
 module.exports = Backbone.Collection.extend({
-	model: Movie,
+	type: null,
+
+	model: function(attrs, options) {
+		switch(options.collection.type) {
+	    	case "movies":
+	        	return new Movie(attrs, options);
+	      	default:
+	        	return new Show(attrs, options);
+	    }
+	},
+
+	initialize: function(models, options) {
+		if (options.type) {
+			this.type = options.type;
+		}
+	},
 
 	/**
-	 * Get movies list
+	 * Get item list
 	 */
 	getList: function(options, parameters, success, error) {
-		var url = Conf.traktTV.api_host + '/movies';
+		var url = Conf.traktTV.api_host + '/' + this.type;
 
 		if (options) {
 			if (options.type) {
@@ -40,7 +56,16 @@ module.exports = Backbone.Collection.extend({
 				}
 				else {
 					_.each(response, _.bind(function(item) {
-						this.add(item.movie);
+						var obj;
+
+						if (this.type == 'movies') {
+							obj = item.movie;
+						}
+						else {
+							obj = item.show;
+						}
+
+						this.add(obj);
 					}, this));
 				}
 			}

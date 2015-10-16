@@ -50,6 +50,12 @@ App.on('start', function() {
         dynamicNavbar: true
     });
 
+    // Shows view
+    f7.addView('.view-shows', {
+        domCache: true, // Use to get deep back button work
+        dynamicNavbar: true
+    });
+
     // Init loader
     App.loader = new Loader({
         in: $('body'),
@@ -72,6 +78,10 @@ App.on('start', function() {
 
             case '.view-movies':
                 page.context = window.router.layout.moviesView.currentView;
+                break;
+
+            case '.view-shows':
+                page.context = window.router.layout.showsView.currentView;
                 break;
         }
     });
@@ -121,8 +131,7 @@ if (window.cordova) {
             }
             // Close app if on first page of views (home index, tab2 index...)
             else if (
-                ($('.view.active').hasClass('view-main') && ($('.view-main .pages .page').length == 1 || $('#home').hasClass('page-on-center'))) ||
-                ($('.view.active').hasClass('view-tab2') && ($('.view-tab2 .pages .page').length == 1 || $('#tab2').hasClass('page-on-center')))
+                ($('.view.active').hasClass('view-main') && ($('.view-main .pages .page').length == 1 || $('#home').hasClass('page-on-center')))
             ) {
                 exitApp();
             }

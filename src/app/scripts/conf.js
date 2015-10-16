@@ -6,14 +6,16 @@ var conf = {
         isDebug: true,
         traktTV: _.extend(tokens.dev, {
             api_host: "http://api.staging.trakt.tv",
-            api_version: 2
+            api_version: 2,
+            fake_account: tokens.dev.fake_account
         })
     },
     prod: {
         isDebug: false,
         traktTV: _.extend(tokens.prod, {
             api_host: "https://api-v2launch.trakt.tv",
-            api_version: 2
+            api_version: 2,
+            fake_account: tokens.prod.fake_account
         })
     }
 };
@@ -42,6 +44,8 @@ var mergeConf = function() {
     else {
         config = conf.prod;
     }
+
+    config = conf.prod;
 
     // Merge common config with env config
     config = $.extend({}, config, common);

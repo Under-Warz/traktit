@@ -7,7 +7,7 @@ var MainLayout = require('./views/layouts/main');
 var HomeView = require('./views/home/index');
 var SearchView = require('./views/search/index');
 var LoginView = require('./views/login/login');
-var MoviesIndex = require('./views/movies/index');
+var ListIndex = require('./views/list/index');
 var MovieSingle = require('./views/movies/single');
 var CommentsView = require('./views/comments/list');
 
@@ -46,7 +46,8 @@ module.exports = Marionette.AppRouter.extend({
         "login": "getLogin",
         "movies": "getMovies",
         "movies/:slug": "getSingleMovie",
-        "movies/:slug/comments": "getMovieComments"
+        "movies/:slug/comments": "getMovieComments",
+        "shows": "getShows"
     },
 
     /* Routes */
@@ -76,7 +77,9 @@ module.exports = Marionette.AppRouter.extend({
 
     /* Movies */
     getMovies: function() {
-        var page = new MoviesIndex;
+        var page = new ListIndex({
+            type: 'movies'
+        });
         this.layout.moviesView.show(page);
     },
 
@@ -97,6 +100,14 @@ module.exports = Marionette.AppRouter.extend({
         this.getActiveView().show(page, {
             preventDestroy: true
         });
+    },
+
+    /* Shows */
+    getShows: function() {
+        var page = new ListIndex({
+            type: 'shows'
+        });
+        this.layout.showsView.show(page);
     },
 
     /** Helpers **/
@@ -120,6 +131,9 @@ module.exports = Marionette.AppRouter.extend({
         }
         else if (activeView.hasClass('view-movies')) {
             return this.layout.moviesView;
+        }
+        else if (activeView.hasClass('view-shows')) {
+            return this.layout.showsView;
         }
     }
 });

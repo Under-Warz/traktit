@@ -1,11 +1,21 @@
 var MainCompositeView = require('../mainCompositeView');
-var MoviesCollection = require('../../collections/movies');
-var MovieView = require('./movie');
+var ListCollection = require('../../collections/list');
+var MovieView = require('../movies/movie');
+var ShowView = require('../shows/show');
+var Movie = require('../../models/movie');
+var Show = require('../../models/show');
 var App = require('App');
 
 module.exports = MainCompositeView.extend({
-    template: require('../../templates/movies/index.hbs'),
-    childView: MovieView,
+    template: require('../../templates/list/index.hbs'),
+    childView: function(obj) {
+        if (obj.model instanceof Movie) {
+            return new MovieView({model: obj.model});
+        }
+        else {
+            return new ShowView({model: obj.model});
+        }
+    },
     childViewContainer: ".list-block ul",
     currentFilter: null,
     loading: false,
@@ -24,9 +34,11 @@ module.exports = MainCompositeView.extend({
         "infinite .infinite-scroll": "loadNextPage"
     },
 
-    initialize: function() {  
-        // Init MoviesCollection
-        this.collection = new MoviesCollection;
+    initialize: function(options) {
+        // Init ListCollection
+        this.collection = new ListCollection([], {
+            type: options.type
+        });
 
         // Set default filter (trending)
         this.currentFilter = 'trending';
