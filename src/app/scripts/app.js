@@ -3,7 +3,8 @@ var User = require('./models/user.js');
 
 var App = Marionette.Application.extend({
 	currentUser: null,
-	movies: null,
+	movies: null, // List of movies previously loaded
+	shows: null, // List of shows previously loaded
 	loader: null, // Common loader
 	
 	initialize: function(options) {
@@ -20,6 +21,15 @@ var App = Marionette.Application.extend({
 		}
 		else {
 			this.movies = {};
+		}
+
+		// Init shows
+		var shows = this.getPersistentData('shows');
+		if (shows) {
+			this.shows = JSON.parse(shows);
+		}
+		else {
+			this.shows = {};
 		}
   	},
 

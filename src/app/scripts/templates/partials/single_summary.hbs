@@ -1,0 +1,19 @@
+<div class="content-block meta-block">
+	<div class="row">
+		<div class="col-50">
+			<span><strong>Released</strong><i>{{release_date}}</i></span>
+			<span><strong>Language</strong><i>{{language}}</i></span>
+			<span><strong>Certification</strong><i>{{certification}}</i></span>
+		</div>
+		<div class="col-50">
+			<span><strong>Director</strong>{{director}}</span>
+			<span><strong>Runtime</strong>{{runtime}}</span>
+			<span><strong>Genres</strong>{{#join genres ", "}}{{this}}{{/join}}</span>
+		</div>
+	</div>
+</div>
+
+{{#if tagline}}<div class="content-block-title">{{tagline}}</div>{{/if}}
+<div class="content-block">
+	<p>{{overview}}</p>
+</div>

@@ -22,6 +22,9 @@ function initialize() {
 	Handlebars.registerPartial("actor", require('./templates/partials/actor_slider.hbs'));
 
 	Handlebars.registerPartial("movie", require('./templates/partials/movie_slider.hbs'));
+
+	Handlebars.registerPartial("summary", require('./templates/partials/single_summary.hbs'));
+	Handlebars.registerPartial("relationships", require('./templates/partials/single_relationships.hbs'));
 }
 
 module.exports = initialize();

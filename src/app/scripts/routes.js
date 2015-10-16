@@ -9,9 +9,11 @@ var SearchView = require('./views/search/index');
 var LoginView = require('./views/login/login');
 var ListIndex = require('./views/list/index');
 var MovieSingle = require('./views/movies/single');
+var ShowSingle = require('./views/shows/single');
 var CommentsView = require('./views/comments/list');
 
 var Movie = require('./models/movie');
+var Show = require('./models/show');
 var Comments = require('./collections/comments');
 
 module.exports = Marionette.AppRouter.extend({
@@ -47,7 +49,9 @@ module.exports = Marionette.AppRouter.extend({
         "movies": "getMovies",
         "movies/:slug": "getSingleMovie",
         "movies/:slug/comments": "getMovieComments",
-        "shows": "getShows"
+        "shows": "getShows",
+        "shows/:slug": "getSingleShow",
+        "shows/:slug/comments": "getShowComments",
     },
 
     /* Routes */
@@ -108,6 +112,25 @@ module.exports = Marionette.AppRouter.extend({
             type: 'shows'
         });
         this.layout.showsView.show(page);
+    },
+
+    getSingleShow: function(slug) {
+        var page = new ShowSingle({
+            model: new Show(App.shows[slug])
+        });
+        this.getActiveView().show(page, {
+            preventDestroy: true
+        });
+    },
+
+    getShowComments: function(slug) {
+        var page = new CommentsView({
+            model: new Show(App.shows[slug]),
+            collection: new Comments(App.shows[slug].comments)
+        });
+        this.getActiveView().show(page, {
+            preventDestroy: true
+        });
     },
 
     /** Helpers **/

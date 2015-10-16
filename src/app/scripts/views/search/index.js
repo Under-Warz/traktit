@@ -5,7 +5,7 @@ var Search = require('../../collections/search');
 var Movie = require('../../models/movie');
 var Show = require('../../models/show');
 var MovieView = require('../movies/movie');
-var ShowView = require('../home/show'); // TODO : change this
+var ShowView = require('../shows/show');
 
 module.exports = ChildCompositeView.extend({
     template: require('../../templates/search/index.hbs'),

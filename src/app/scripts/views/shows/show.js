@@ -16,11 +16,11 @@ module.exports = Marionette.ItemView.extend({
     },
 
     showShow: function(e) {
-    	/*if (App.movies[this.model.get('ids').slug] == null) {
-    		App.movies[this.model.get('ids').slug] = this.model.toJSON();
+    	if (App.shows[this.model.get('ids').slug] == null) {
+    		App.shows[this.model.get('ids').slug] = this.model.toJSON();
     	}
 
-    	window.router.navigate('movies/' + this.model.get('ids').slug, { trigger: true });*/
+    	window.router.navigate('shows/' + this.model.get('ids').slug, { trigger: true });
 
     	e.preventDefault();
     	return false;

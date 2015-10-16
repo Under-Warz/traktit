@@ -4,16 +4,16 @@ var Conf = require('Conf');
 var ActionBar = require('../partials/single_actionbar');
 
 module.exports = ChildItemView.extend({
-    template: require('../../templates/movies/single.hbs'),
+    template: require('../../templates/shows/single.hbs'),
     castSwiper: null,
     relatedSwiper: null,
     actionBar: null,
 
     attributes: function() {
         return {
-            id: "movies-single",
+            id: "shows-single",
             class: "page single",
-            "data-page": "movies-single"
+            "data-page": "shows-single"
         }
     },
 
@@ -31,7 +31,7 @@ module.exports = ChildItemView.extend({
     },
 
     additionalEvents: {
-        "click .related .swiper-slide": "showRelatedMovie"
+        "click .related .swiper-slide": "showRelatedShow"
     },
 
     onRender: function() {
@@ -44,7 +44,7 @@ module.exports = ChildItemView.extend({
         // Render ActionBar
         this.actionBar = new ActionBar({
             model: this.model,
-            type: "movies"
+            type: "shows"
         });
         this.$el.find('.picture-block').after(this.actionBar.render().$el);
 
@@ -72,17 +72,17 @@ module.exports = ChildItemView.extend({
     },
 
     /**
-     * Show related movie
+     * Show related show
      */
-    showRelatedMovie: function(e) {
+    showRelatedShow: function(e) {
         var index = this.$el.find('.related .swiper-slide').index(e.currentTarget);
-        var relatedMovie = this.model.get('related')[index];
+        var relatedShow = this.model.get('related')[index];
 
-        if (App.movies[relatedMovie.ids.slug] == null) {
-            App.movies[relatedMovie.ids.slug] = relatedMovie;
+        if (App.shows[relatedShow.ids.slug] == null) {
+            App.shows[relatedShow.ids.slug] = relatedShow;
         }
 
-        window.router.navigate('movies/' + relatedMovie.ids.slug, { trigger: true });
+        window.router.navigate('shows/' + relatedShow.ids.slug, { trigger: true });
 
         e.preventDefault();
         return false;
