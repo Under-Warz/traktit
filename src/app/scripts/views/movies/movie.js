@@ -4,7 +4,7 @@ var App = require('App');
 module.exports = Marionette.ItemView.extend({
     template: require('../../templates/movies/movie.hbs'),
     tagName: 'li',
-    className: 'swipeout',
+    className: 'swipeout movie',
 
     events: {
     	"click .swipeout-content": "showMovie",

@@ -1,0 +1,21 @@
+#search {
+	.filters {
+		padding: 15px;
+	}
+
+	.list-block {
+		margin-top: 0;
+
+		&.show-movies {
+			li.show {
+				display: none;
+			}
+		}
+
+		&.show-shows {
+			li.movie {
+				display: none;
+			}
+		}
+	}
+}

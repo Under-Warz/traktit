@@ -24,7 +24,8 @@ module.exports = ChildCompositeView.extend({
 
     additionalEvents: {
         "infinite .infinite-scroll": "loadNextPage",
-        "keypress input[name='search']": "makeSearch"
+        "keypress input[name='search']": "makeSearch",
+        "click .filters .button": "filterResult"
     },
 
     attributes: function() {
@@ -62,7 +63,7 @@ module.exports = ChildCompositeView.extend({
             if (e.keyCode == 13) {
                 // Scroll top
                 this.$el.find('.page-content').scrollTop(0);
-                
+
                 // Reinit page
                 this.page = 1;
 
@@ -110,5 +111,31 @@ module.exports = ChildCompositeView.extend({
             // Remove preloader
             this.$el.find('.infinite-scroll-preloader').hide();
         }, this));
+    },
+
+    /**
+     * Filter results / show movie or shows only
+     */
+    filterResult: function(e) {
+        var btn = $(e.currentTarget),
+            list = this.$el.find('.list-block'),
+            filter;
+
+        if (btn.hasClass('active')) {
+            btn.removeClass('active');    
+        }
+        else {
+            btn.parent().find('.active').removeClass('active');
+            btn.addClass('active');
+            filter = btn.data('filter');
+        }
+
+        if (filter) {
+            list.removeClass('show-shows show-movies');
+            list.addClass('show-' + filter);
+        }
+        else {
+            list.removeClass('show-shows show-movies');
+        }
     }
 });
