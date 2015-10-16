@@ -25,6 +25,21 @@ module.exports = Backbone.Model.extend({
 		this._setMovieIsInCollection();
 	},
 
+	toJSON: function() {
+		// Set banner image
+		var banner;
+		if (this.get('images').thumb) {
+			banner = this.get('images').thumb.full;
+		}
+		else {
+			banner = this.get('images').fanart.medium;
+		}
+		this.set('banner', banner);
+
+		var json = Backbone.Model.prototype.toJSON.apply(this, arguments);
+        return json;
+	},
+
 	// Save movie detail in app and optionnaly in persistant storage
 	save: function(persistant) {
 		App.movies[this.get('ids').slug] = this.toJSON();

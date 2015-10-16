@@ -5,6 +5,7 @@ var App = require('App');
 var MainLayout = require('./views/layouts/main');
 
 var HomeView = require('./views/home/index');
+var SearchView = require('./views/search/index');
 var LoginView = require('./views/login/login');
 var MoviesIndex = require('./views/movies/index');
 var MovieSingle = require('./views/movies/single');
@@ -41,6 +42,7 @@ module.exports = Marionette.AppRouter.extend({
 
     routes: {
         "": "getHome",
+        "search": "getSearch",
         "login": "getLogin",
         "movies": "getMovies",
         "movies/:slug": "getSingleMovie",
@@ -56,6 +58,14 @@ module.exports = Marionette.AppRouter.extend({
             var page = new HomeView;
             this.layout.mainView.show(page);
         }
+    },
+
+    /* Search */
+    getSearch: function() {
+        var page = new SearchView;
+        this.layout.mainView.show(page, {
+            preventDestroy: true
+        });
     },
 
     /* Login */
@@ -74,7 +84,7 @@ module.exports = Marionette.AppRouter.extend({
         var page = new MovieSingle({
             model: new Movie(App.movies[slug])
         });
-        this.layout.moviesView.show(page, {
+        this.getActiveView().show(page, {
             preventDestroy: true
         });
     },
@@ -84,7 +94,7 @@ module.exports = Marionette.AppRouter.extend({
             model: new Movie(App.movies[slug]),
             collection: new Comments(App.movies[slug].comments)
         });
-        this.layout.moviesView.show(page, {
+        this.getActiveView().show(page, {
             preventDestroy: true
         });
     },
@@ -96,6 +106,20 @@ module.exports = Marionette.AppRouter.extend({
         }
         else {
             return true;
+        }
+    },
+
+    getActiveView: function() {
+        var activeView = $('.view.active');
+
+        if (activeView.hasClass('view-main')) {
+            return this.layout.mainView;
+        }
+        else if (activeView.hasClass('view-login')) {
+            return this.layout.loginView;
+        }
+        else if (activeView.hasClass('view-movies')) {
+            return this.layout.moviesView;
         }
     }
 });
