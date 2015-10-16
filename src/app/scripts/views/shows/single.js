@@ -1,10 +1,14 @@
-var ChildItemView = require('../childItemView');
+var ChildCompositeView = require('../childCompositeView');
 var App = require('App');
 var Conf = require('Conf');
 var ActionBar = require('../partials/single_actionbar');
+var SeasonView = require('../list/season');
+var SeasonCollection = require('../../collections/seasons');
 
-module.exports = ChildItemView.extend({
+module.exports = ChildCompositeView.extend({
     template: require('../../templates/shows/single.hbs'),
+    childView: SeasonView,
+    childViewContainer: ".seasons ul",
     castSwiper: null,
     relatedSwiper: null,
     actionBar: null,
@@ -18,15 +22,27 @@ module.exports = ChildItemView.extend({
     },
 
     initialize: function() {
+        // Construct season collection
+        this.collection = new SeasonCollection;
+
         // Load movie if no data loaded previously or in storage
         if (this.model.get('fetched') == false) {
             App.loader.show();
             this.model.fetch(_.bind(function() {
                 App.loader.hide();
+
+                // Construct season collection
+                console.log(this.model);
+                this.collection.add(this.model.get('seasons'));
+
                 this.render();
             }, this), function() {
                 App.loader.hide();
             });
+        }
+        else {
+            console.log(this.model);
+            this.collection.add(this.model.get('seasons'));
         }
     },
 
@@ -68,7 +84,7 @@ module.exports = ChildItemView.extend({
     },
 
     onShow: function() {
-        ChildItemView.prototype.onShow.call(this, this, null);
+        ChildCompositeView.prototype.onShow.call(this, this, null);
     },
 
     /**

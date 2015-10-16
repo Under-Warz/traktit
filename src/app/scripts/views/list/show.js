@@ -2,7 +2,7 @@ var Marionette = require('marionette');
 var App = require('App');
 
 module.exports = Marionette.ItemView.extend({
-    template: require('../../templates/shows/show.hbs'),
+    template: require('../../templates/list/show.hbs'),
     tagName: 'li',
     className: 'swipeout show',
 

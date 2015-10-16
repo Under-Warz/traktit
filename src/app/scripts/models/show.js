@@ -66,6 +66,13 @@ module.exports = Item.extend({
 				}, function() {
 					callback("error", 'fetchRelated');
 				});
+			}, this),
+			_.bind(function(callback) {
+				this.fetchSeasons(function(response) {
+					callback(null, 'fetchSeasons');
+				}, function() {
+					callback("error", 'fetchSeasons');
+				});
 			}, this)
 		], _.bind(function(err, results) {
 			if (err == null) {
@@ -82,6 +89,26 @@ module.exports = Item.extend({
 				}
 			}
 		}, this));
+	},
+
+	/**
+	 * Get all seasons of the show
+	 */
+	fetchSeasons: function(success, error) {
+		ClientREST.get(Conf.traktTV.api_host + '/shows/' + this.get('ids').slug + '/seasons', { extended: 'images' }, _.bind(function(response) {
+			this.set('seasons', response);
+
+			// Save
+			this.save();
+
+			if (success) {
+				success(response);
+			}
+		}, this), function() {
+			if (error) {
+				error();
+			}
+		});
 	},
 
 	/** 

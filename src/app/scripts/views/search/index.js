@@ -4,8 +4,8 @@ var Conf = require('Conf');
 var Search = require('../../collections/search');
 var Movie = require('../../models/movie');
 var Show = require('../../models/show');
-var MovieView = require('../movies/movie');
-var ShowView = require('../shows/show');
+var MovieView = require('../list/movie');
+var ShowView = require('../list/show');
 
 module.exports = ChildCompositeView.extend({
     template: require('../../templates/search/index.hbs'),
