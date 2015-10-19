@@ -12,7 +12,7 @@ module.exports = ChildCompositeView.extend({
     childViewContainer: ".episodes ul",
     actionBar: null,
     number: null,
-    season: null,
+    show: null,
 
     attributes: function() {
         return {
@@ -30,16 +30,16 @@ module.exports = ChildCompositeView.extend({
         this.number = options.number;
 
         // Get current season
-        this.season = new Season(this.model.get('seasons')[this.number]);
+        this.show = options.show;
 
         // Load movie if no data loaded previously or in storage
-        if (this.season.get('fetched') == false) {
+        if (this.model.get('fetched') == false) {
             App.loader.show();
-            this.season.fetch(this.model.get('ids').slug, _.bind(function() {
+            this.model.fetch(this.show.get('ids').slug, _.bind(function() {
                 App.loader.hide();
 
                 // Construct season collection
-                this.collection.add(this.season.get('episodes'));
+                this.collection.add(this.model.get('episodes'));
 
                 this.render();
             }, this), function() {
@@ -47,12 +47,12 @@ module.exports = ChildCompositeView.extend({
             });
         }
         else {
-            this.collection.add(this.season.get('episodes'));
+            this.collection.add(this.model.get('episodes'));
         }
     },
 
     serializeData: function() {
-        return _.extend(this.season.toJSON(), { show: this.model.toJSON() });
+        return _.extend(this.model.toJSON(), { show: this.show.toJSON() });
     },
 
     additionalEvents: {
