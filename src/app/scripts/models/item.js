@@ -20,8 +20,11 @@ module.exports = Backbone.Model.extend({
 		if (this.get('images').thumb) {
 			banner = this.get('images').thumb.full;
 		}
-		else {
+		else if(this.get('images').fanart) {
 			banner = this.get('images').fanart.medium;
+		}
+		else {
+			banner = this.get('images').screenshot.medium;	
 		}
 		this.set('banner', banner);
 

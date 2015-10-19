@@ -1,0 +1,23 @@
+<div class="navbar-inner">
+	<div class="left"><a href="#" class="back">Back</a></div>
+	<div class="center sliding">{{show.title}}</div>
+	<div class="right"></div>
+</div>
+
+<div class="page-content">
+	<div class="picture-block" style="background-image: url({{images.fanart.thumb}});">
+		<div class="item-inner">
+			<div class="item-infos">
+				<h2>{{show.title}}</h2>
+				<h3>Season {{number}}</h3>
+			</div>
+		</div>
+	</div>
+
+	{{> summary show}}
+
+	<div class="content-block-title">{{episodes.length}} episodes</div>
+	<div class="list-block episodes">
+        <ul></ul>
+    </div>
+</div>

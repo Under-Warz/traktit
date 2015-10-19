@@ -8,7 +8,7 @@ module.exports = Marionette.ItemView.extend({
     show: null,
 
     events: {
-    	"click .swipeout-content": "showSeason",
+    	"click .swipeout-content": "showEpisode",
         "click .btn-toggle": "toggleAction"
     },
 
@@ -22,7 +22,7 @@ module.exports = Marionette.ItemView.extend({
         return this.model.toJSON();
     },
 
-    showSeason: function(e) {
+    showEpisode: function(e) {
     	window.router.navigate('shows/' + this.show.get('ids').slug + '/season/' + this.model.get('number'), { trigger: true });
 
     	e.preventDefault();

@@ -10,10 +10,12 @@ var LoginView = require('./views/login/login');
 var ListIndex = require('./views/list/index');
 var MovieSingle = require('./views/movies/single');
 var ShowSingle = require('./views/shows/single');
+var SeasonSingle = require('./views/shows/season');
 var CommentsView = require('./views/comments/list');
 
 var Movie = require('./models/movie');
 var Show = require('./models/show');
+var Season = require('./models/season');
 var Comments = require('./collections/comments');
 
 module.exports = Marionette.AppRouter.extend({
@@ -52,6 +54,7 @@ module.exports = Marionette.AppRouter.extend({
         "shows": "getShows",
         "shows/:slug": "getSingleShow",
         "shows/:slug/comments": "getShowComments",
+        "shows/:slug/season/:season": "getSingleSeason"
     },
 
     /* Routes */
@@ -127,6 +130,16 @@ module.exports = Marionette.AppRouter.extend({
         var page = new CommentsView({
             model: new Show(App.shows[slug]),
             collection: new Comments(App.shows[slug].comments)
+        });
+        this.getActiveView().show(page, {
+            preventDestroy: true
+        });
+    },
+
+    getSingleSeason: function(slug, season) {
+        var page = new SeasonSingle({
+            model: new Show(App.shows[slug]),
+            number: season
         });
         this.getActiveView().show(page, {
             preventDestroy: true

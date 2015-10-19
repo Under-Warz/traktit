@@ -9,6 +9,11 @@ module.exports = ChildCompositeView.extend({
     template: require('../../templates/shows/single.hbs'),
     childView: SeasonView,
     childViewContainer: ".seasons ul",
+    childViewOptions: function() {
+        return {
+            show: this.model
+        }
+    },
     castSwiper: null,
     relatedSwiper: null,
     actionBar: null,
@@ -32,7 +37,6 @@ module.exports = ChildCompositeView.extend({
                 App.loader.hide();
 
                 // Construct season collection
-                console.log(this.model);
                 this.collection.add(this.model.get('seasons'));
 
                 this.render();
@@ -41,7 +45,6 @@ module.exports = ChildCompositeView.extend({
             });
         }
         else {
-            console.log(this.model);
             this.collection.add(this.model.get('seasons'));
         }
     },
