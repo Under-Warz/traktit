@@ -5,6 +5,7 @@ var App = Marionette.Application.extend({
 	currentUser: null,
 	movies: null, // List of movies previously loaded
 	shows: null, // List of shows previously loaded
+	seasons: null, // List of seasons previously loaded
 	loader: null, // Common loader
 	
 	initialize: function(options) {
@@ -30,6 +31,15 @@ var App = Marionette.Application.extend({
 		}
 		else {
 			this.shows = {};
+		}
+
+		// Init seasons
+		var seasons = this.getPersistentData('seasons');
+		if (seasons) {
+			this.seasons = JSON.parse(seasons);
+		}
+		else {
+			this.seasons = {};
 		}
   	},
 

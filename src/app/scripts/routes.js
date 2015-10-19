@@ -141,7 +141,7 @@ module.exports = Marionette.AppRouter.extend({
 
         var page = new SeasonSingle({
             show: show,
-            model: new Season(show.get('seasons')[season]),
+            model: new Season(App.seasons[show.get('seasons')[season].ids.trakt]),
             number: season
         });
         this.getActiveView().show(page, {

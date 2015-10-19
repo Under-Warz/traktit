@@ -10,10 +10,20 @@ module.exports = Item.extend({
 		this.set('type', 'seasons');
 	},
 
+	// Save movie detail in app and optionnaly in persistant storage
+	save: function(persistant) {
+		App.seasons[this.get('ids').trakt] = this.toJSON();
+
+		if (persistant) {
+			App.savePersistentData('seasons', App.seasons);
+		}
+	},
+
 	fetch: function(showSlug, success, error) {
 		this.fetchEpisodes(showSlug, _.bind(function(response) {
-
 			this.set('fetched', true);
+
+			this.save(true);
 
 			if (success) {
 				success(response);
@@ -33,7 +43,7 @@ module.exports = Item.extend({
 			this.set('episodes', response);
 
 			// Save
-			//this.save();
+			this.save();
 
 			if (success) {
 				success(response);

@@ -23,6 +23,10 @@ module.exports = Marionette.ItemView.extend({
     },
 
     showSeason: function(e) {
+        if (App.seasons[this.model.get('ids').trakt] == null) {
+            App.seasons[this.model.get('ids').trakt] = this.model.toJSON();
+        }
+
     	window.router.navigate('shows/' + this.show.get('ids').slug + '/season/' + this.model.get('number'), { trigger: true });
 
     	e.preventDefault();
