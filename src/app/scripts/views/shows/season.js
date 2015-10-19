@@ -23,32 +23,14 @@ module.exports = ChildCompositeView.extend({
     },
 
     initialize: function(options) {
-        // Construct season collection
-        this.collection = new EpisodesCollection;  
+        // Construct episodes collection
+        this.collection = new EpisodesCollection(this.model.get('episodes'));  
 
         // Get current season number
         this.number = options.number;
 
         // Get current season
         this.show = options.show;
-
-        // Load movie if no data loaded previously or in storage
-        if (this.model.get('fetched') == false) {
-            App.loader.show();
-            this.model.fetch(this.show.get('ids').slug, _.bind(function() {
-                App.loader.hide();
-
-                // Construct season collection
-                this.collection.add(this.model.get('episodes'));
-
-                this.render();
-            }, this), function() {
-                App.loader.hide();
-            });
-        }
-        else {
-            this.collection.add(this.model.get('episodes'));
-        }
     },
 
     serializeData: function() {

@@ -21,6 +21,13 @@ module.exports = Backbone.Model.extend({
 				});
 			}, this),
 			_.bind(function(callback) {
+				this.getWatchedShows(function(response) {
+					callback(null, 'getWatchedShows');
+				}, function() {
+					callback("error", 'getWatchedShows');
+				});
+			}, this),
+			_.bind(function(callback) {
 				this.getWatchlistContent(function(response) {
 					callback(null, 'getWatchlistContent');
 				}, function() {
@@ -51,6 +58,24 @@ module.exports = Backbone.Model.extend({
 		ClientREST.get(Conf.traktTV.api_host + '/sync/watched/movies', { extended: 'images' }, _.bind(function(response) {
 			// Save data in user
 			this.set('watchedMovies', response);
+
+			if (success) {
+				success(response);
+			}
+		}, this), function() {
+			if (error) {
+				error();
+			}
+		});
+	},
+
+	/** 
+	 * Get all shows watched
+	 */
+	getWatchedShows: function(success, error) {
+		ClientREST.get(Conf.traktTV.api_host + '/sync/watched/shows', { extended: 'images' }, _.bind(function(response) {
+			// Save data in user
+			this.set('watchedShows', response);
 
 			if (success) {
 				success(response);
